@@ -1,0 +1,2 @@
+file_server:lane_detect:video_stream
+-DCATKIN_DEVEL_PREFIX=/home/haimeohung/Destiny/devel -DCMAKE_INSTALL_PREFIX=/home/haimeohung/Destiny/install -G Unix Makefiles
