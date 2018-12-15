@@ -1,174 +1,97 @@
-#include "carcontrol.h"
+#include "CarControl.h"
 
-CarControl::CarControl()
+Line CarControl::MostAccurateLane(const vector<Point> &Lane)
 {
-    //Tham số của bánh lái, cần xem kĩ chỗ này
-    //carPos.x nều > 120 thì xe sẽ quẹo phải và ngược lại
-    //carPos.x nếu < 300 thì xe sẽ quẹo phải và ngược lại
-    carPos.x = 120;
-    carPos.y = 300;
-    steer_publisher = node_obj1.advertise<std_msgs::Float32>("Team1_steerAngle", 10);
-    speed_publisher = node_obj2.advertise<std_msgs::Float32>("Team1_speed", 10);
+	LineFunction F; // Object for caculate
+	Line line;
+	Line res;
+	res.a = 0;
+	res.b = 0;
+	res.c = 0;
+	double deviation;
+	double min = numeric_limits<double>::max();
+
+	if (Lane.size() < 1)
+		return res;
+
+	// Consider each pair of points
+	for (int i = 0; i < Lane.size() - 1; i++) // Unknow error: loot infinity when size of vector <= 1
+	{
+		for (int j = i + 1; j < Lane.size(); j++)
+		{
+			deviation = 0;
+			// Create a linear equations
+			line = F.CaculateLine(Lane[i], Lane[j]);
+			// Caculate total deviation
+			for (int k = 0; k < Lane.size(); k++)
+				deviation += F.Distance(line, Lane[k]);
+			if (deviation < min)
+			{
+				min = deviation;
+				res = line;
+			}
+		}
+	}
+	return res;
 }
 
-CarControl::~CarControl() {}
-//getAngleLane
-double getanglelane()
+void CarControl::IgnoreNoise(Line line, vector<Point>& Lane)
 {
-    return 0;
+	LineFunction F;
+	for (int i = Lane.size() - 1; i > 0; i--)
+	{
+		double tmp = F.Distance(line, Lane[i]);
+		if (F.Distance(line, Lane[i]) > LimitDistance)
+			Lane.erase(Lane.begin() + i);
+	}
 }
-float CarControl::errorAngle(const Point &dst)
+
+void CarControl::UpdateSizeLane(int NewSizeLane)
 {
-    //dst là center point cần phải đi đến
-    //nếu xe đã ở vị trí center point x thì ko cần phải xoay bánh lái nữa
-    if (dst.x == carPos.x)
-        return 0;
-    if (dst.y == carPos.y)
-        return (dst.x < carPos.x ? -90 : 90);
-    // lấy pi
-    double pi = acos(-1.0);
-    double dx = dst.x - carPos.x;
-    double dy = carPos.y - dst.y;
-    //tính góc xoay
-    if (dx < 0)
-        return -atan(-dx / dy) * 180 / pi;
-    return atan(dx / dy) * 180 / pi;
+	SizeLane = SizeLane * (1 - Alpha) + NewSizeLane * Alpha;
 }
-int i;
-int counter_left = 0;
-int counter_right = 0;
-void CarControl::driverCar(const vector<Point> &left, const vector<Point> &right, float velocity)
+
+double CarControl::Fx(int x)
 {
-    Point preLeft, preRight;
-    Point dst, predst;
-    if (left.size() <= right.size())
-    {
-        i = left.size() - 5;
-    }
-    else
-    {
-        i = right.size() - 5;
-    }
-
-    float error;
-    float setError;
-    float preVelocity;
-    int delta = 10;
-
-    int sign = 0; //Sign recoz
-    if (sign == 0)
-    {
-        if (counter_left != 0)
-            counter_left--;
-        if (counter_right != 0)
-            counter_right--;
-    }
-    //if (sign == 1)
-    //{
-    //    counter_right = 6;
-    //   counter_left = 0;
-    //}
-    //if (sign == -1)
-    //{
-    //    counter_left = 6;
-    //    counter_right = 0;
-    //}
-    //No left no right
-    if (counter_left == 0 && counter_right == 0)
-    {
-
-        //Mất 2 làn
-        if (left[i] == DetectLane::null && right[i] == DetectLane::null)
-        {
-            //laneWidth = (laneWidth + preRight.x - preLeft.x) / 2;
-            //dst = (preLeft + preRight) / 2;
-            //error = errorAngle(dst);
-            /*if (flag == false)
-            {
-
-                flag = true;
-                DetectLane *detect2;
-                detect2->Fix_Thres();
-                //cv_bridge::CvImagePtr cv_ptr;
-                //  cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
-                //detect2->update(detect2->out);
-                //CarControl::driverCar(detect2->getLeftLane(), detect2->getRightLane(), 50);
-                detect2->Def_Thres();
-                flag = false;
-            }*/
-            //error = preError;
-            //error = preError + 15;
-            i--;
-            if (i < 0)
-              return;
-        }
-        else
-        {
-            //Không mất làn
-            if (left[i] != DetectLane::null && right[i] != DetectLane::null)
-            {
-                dst = (left[i] + right[i]) / 2;
-
-                error = errorAngle(dst);
-                setError = error;
-                laneWidth = (laneWidth + right[i].x - left[i].x) / 2;
-            }
-            //Mất làn phải
-            else if (left[i] != DetectLane::null)
-            {
-                //laneWidth = (laneWidth + preRight.x - left[i].x) / 2;
-                dst.x = left[i].x + int(laneWidth) * 1 / 2 - 20;
-                //dst.x = predst.x + preRight.x - right[i].x;
-                dst.y = 5;
-                error = errorAngle(dst);
-                setError = error;
-            }
-            //Mất làn trái
-            else
-            {
-
-                dst.x = right[i].x - int(laneWidth) * 1 / 2 + 20;
-                //dst.x = predst.x + right[i].x - preRight.x;
-                dst.y = 5;
-                error = errorAngle(dst);
-                setError = error;
-            }
-        }
-    }
-    //Biển báo rẽ phải bám làn phải
-    else if (counter_right != 0 && counter_left == 0)
-    {
-        counter_right--;
-        error = 60;
-    }
-    //Biển báo rẽ trái bám làn trái
-    else
-    {
-        counter_right--;
-        error = 60;
-    }
-
-    if (left[i] != DetectLane::null)
-    {
-        preLeft = left[i];
-    }
-    if (right[i] != DetectLane::null)
-    {
-        preRight = right[i];
-    }
-    preError = error;
-    preVelocity = velocity;
-    predst = dst;
-    velocity = 55 - error * 3;
-    if (velocity < 30)
-        velocity = 30;
-
-    std_msgs::Float32 angle;
-    std_msgs::Float32 speed;
-
-    angle.data = error;
-    speed.data = velocity;
-
-    steer_publisher.publish(angle);
-    speed_publisher.publish(speed);
+	return FxSize_a * x + FxSize_b;
 }
+
+double CarControl::GetAngle(const vector<Point>& LaneL, const vector<Point>& LaneR, const vector<Point> &LaneM)
+{
+	Line res;
+	LineFunction F;
+	IgnoreNoise(MostAccurateLane(LaneDetect::LaneL), LaneDetect::LaneL);
+	IgnoreNoise(MostAccurateLane(LaneDetect::LaneR), LaneDetect::LaneR);
+	// Lost lane, kept old angle
+	if (LaneL.size() + LaneR.size() < TooFew << 1)
+		return OldAngle;
+	// Lost left lane, follow right lane
+	if (LaneL.size() < TooFew)
+	{
+		res = MostAccurateLane(LaneR);
+		OldAngle = F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect) - SizeLane >> 1, LineDetect));
+		return OldAngle;
+	}
+	// Lost right lane, follow left lane
+	if (LaneR.size() < TooFew)
+	{
+		res = MostAccurateLane(LaneL);
+		OldAngle = F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect) + SizeLane >> 1, LineDetect));
+		return OldAngle;
+	}
+	// no lost lane
+	res = MostAccurateLane(LaneM);
+	//SizeLane = Fx(LineDetect)*Alpha + SizeLane * (1 - Alpha);
+	//OldAngle = F.Angle(F.CaculateLine(CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect)));
+	Line L = MostAccurateLane(LaneL);
+	Line R = MostAccurateLane(LaneR);
+	UpdateSizeLane(F.ReturnX(L, LineDetect) + F.ReturnX(R, LineDetect) >> 1);
+
+	line(LaneDetect::draw, Point(F.ReturnX(res, 0), 0), Point(F.ReturnX(res, 160), 160), Scalar(255, 0, 255));
+	OldAngle = F.Angle(res) / 1.25;
+	imshow("Lane detect", LaneDetect::draw);
+
+	return OldAngle;
+}
+
+

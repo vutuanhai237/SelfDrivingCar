@@ -1,129 +1,134 @@
 #include "TrafficSign.h"
+#include <iostream>
 
-void TrafficSign::PreFixImg()
+using namespace std;
+
+void TrafficSign::Setting()
 {
-	if (DetectRightOnly)
-		img = Mat(img, Rect(img.cols >> 1, 0, img.cols >> 1, img.rows)); // Lay lan duong ben phai
-
-	cvtColor(img, img, COLOR_BGR2HSV, 0);
-
-	inRange(img, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), img);
-	//morphological opening (removes small objects from the foreground)
-	erode(img, img, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
-	dilate(img, img, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
-	//morphological closing (removes small holes from the foreground)
-	dilate(img, img, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
-	erode(img, img, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
+	namedWindow("Setting", CV_WINDOW_AUTOSIZE);
+	cvCreateTrackbar("LowH", "Setting", &iLowH, 255);
+	cvCreateTrackbar("HighH", "Setting", &iHighH, 255);
+	cvCreateTrackbar("LowL", "Setting", &iLowL, 255);
+	cvCreateTrackbar("HighL", "Setting", &iHighL, 255);
+	cvCreateTrackbar("LowS", "Setting", &iLowS, 255);
+	cvCreateTrackbar("HighS", "Setting", &iHighS, 255);
 }
 
-int TrafficSign::DetectedContours(Mat &src)
+int TrafficSign::Find(Mat & src)
+{
+	return CheckSign(ThresholdDetection(src, PreFix(src)));
+}
+
+Mat TrafficSign::PreFix(const Mat &src)
+{
+	//imshow("Camera", src);
+	int iIgnoreObj = 1;
+	Mat des(src, Rect(src.cols >> 1, 0, src.cols >> 1, src.rows));
+	//imshow("Real", des);
+	//cvtColor(src, des, COLOR_RGB2HLS);
+	cvtColor(des, des, COLOR_BGR2HLS);
+
+	//imshow("HLS", des);
+
+	GaussianBlur(des, des, Size(3, 3), 0);
+	inRange(des, Scalar(iLowH, iLowL, iLowS), Scalar(iHighH, iHighL, iHighS), des);
+	//morphological opening (removes small objects from the foreground)
+	erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
+	dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
+	//morphological closing (removes small holes from the foreground)
+	dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
+	erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
+
+	//imshow("IHLS threshold", des);
+
+	return des;
+}
+
+// Draw rectangle theshold detetion from matrix Thres into matrix draw
+Mat TrafficSign::ThresholdDetection(Mat &draw, const Mat &Thres)
 {
 	RNG rng(12345);
 	vector<vector<Point>> contours;
 	vector<Vec4i> hierarchy;
-	// Zoning identification
-	img.copyTo(src);
-	findContours(img, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-	Rect rec = boundingRect(contours[0]);
+
+	findContours(Thres, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+	Rect rec(0, 0, 1, 1);
+
 	for (int i = 0; i < contours.size(); i++)
 	{
 		Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
 		// Find bigest obj
 		Rect tmp = boundingRect(contours[i]);
-		if (tmp.area() > rec.area())
-			rec = tmp;
+		if ((tmp.width > (tmp.height << 1)) || ((tmp.width << 1) < tmp.height))
+			continue;
+		if (tmp.area() > MinSquare)
+			if (rec.area() < tmp.area())
+				rec = tmp;
 	}
-	// Draw bigest obj
-	if (DetectRightOnly)
-		rectangle(src, Rect(rec.x + src.cols, rec.y, rec.width, rec.height), Scalar(255, 0, 0), 2);
+	if (rec.area() < MinSquare)
+		return Mat(draw, Rect(0, 0, 1, 1));
+	rectangle(draw, Rect(rec.x, rec.y, rec.width, rec.height), Scalar(0, 0, 255));
+
+	//imshow("Real", draw);
+
+	// forcus to obj detected and cover to square
+	Mat fix(Thres, rec);
+	if (rec.height > rec.width)
+		resize(fix, fix, Size(rec.height, rec.height));
 	else
-		rectangle(src, Rect(rec.x, rec.y, rec.width, rec.height), Scalar(0, 0, 255), 2);
-	// Fix ellipse to circle
-	Size transf(iSizeF, iSizeF);
-	Mat fix;
-	resize(img, fix, transf);
-	resize(Mat(img, rec), fix, transf);
+		resize(fix, fix, Size(rec.width, rec.width));
+	//imshow("forcus", fix);
 
-	//if (ShowCam)
-		imshow("fix to circle", fix);
+	return fix;
+}
 
-	// Is Circle
-	vector<Vec3f> circles;
-	HoughCircles(fix, circles, CV_HOUGH_GRADIENT, 2, 5);
-	if (circles.size() <= 0)
+int TrafficSign::CheckSign(const Mat &src)
+{
+	if (flag)
+	{
+		if (TrafficSign::CountFrame > TrafficSign::UnlockFlag)
+		{
+			TrafficSign::CountFrame = 0;
+			TrafficSign::flag = false;
+		}
+		else
+		{
+			TrafficSign::CountFrame++;
+			return TrafficSign::OldSign;
+		}
+	}
+
+	if (src.rows < 3)
+	{
+		TrafficSign::CountFrame = 0;
 		return 0;
-	Mat HalfL = Mat(fix, Rect(0, 0, iSizeF >> 1, iSizeF >> 1));
-	Mat HalfR = Mat(fix, Rect(iSizeF >> 1, 0, iSizeF >> 1, iSizeF >> 1));
-
-	if (ShowCam)
-	{
-		imshow("HalfL", HalfL);
-		imshow("HalfR", HalfR);
 	}
 
-	if (countNonZero(HalfL) < countNonZero(HalfR))
-		return -1;
+	Mat HalfL(src, Rect(0, 0, src.cols >> 1, src.rows >> 1));
+	Mat HalfR(src, Rect(src.cols >> 1, 0, src.cols >> 1, src.rows >> 1));
+
+	int sign = countNonZero(HalfL) < countNonZero(HalfR) ? -1 : 1;
+	if (TrafficSign::CountFrame == 0)
+	{
+		OldSign = sign;
+		CountFrame = 1;
+	}
 	else
-		return 1;
-}
-
-TrafficSign::TrafficSign()
-{
-	iIgnoreObj = 1;
-	iSizeF = 50;
-
-	iLowH = 75;
-	iHighH = 130;
-
-	iLowS = 100;
-	iHighS = 255;
-
-	iLowV = 100;
-	iHighV = 255;
-}
-
-TrafficSign::TrafficSign(const Mat &src)
-{
-	iIgnoreObj = 1;
-	iSizeF = 50;
-
-	iLowH = 75;
-	iHighH = 130;
-
-	iLowS = 100;
-	iHighS = 255;
-
-	iLowV = 100;
-	iHighV = 255;
-	img = src;
-}
-
-void TrafficSign::InitControl()
-{
-	namedWindow("Control", CV_WINDOW_AUTOSIZE);
-
-	cvCreateTrackbar("LowH", "Control", &iLowH, 179); //Hue (0 - 179)
-	cvCreateTrackbar("HighH", "Control", &iHighH, 179);
-
-	cvCreateTrackbar("LowS", "Control", &iLowS, 255); //Saturation (0 - 255)
-	cvCreateTrackbar("HighS", "Control", &iHighS, 255);
-
-	cvCreateTrackbar("LowV", "Control", &iLowV, 255); //Value (0 - 255)
-	cvCreateTrackbar("HighV", "Control", &iHighV, 255);
-}
-
-int TrafficSign::IsTrafficSigns()
-{
-	if (mirror)
-		flip(img, img, 1);
-	Mat src;
-	img.copyTo(src);
-	PreFixImg();
-	int res = DetectedContours(src);
-	if (ShowCam)
+		if (sign = OldSign)
+			TrafficSign::CountFrame++;
+		else
+		{
+			OldSign = sign;
+			CountFrame = 1;
+		}
+	if (TrafficSign::CountFrame > TrafficSign::LockFlag)
 	{
-		imshow("real", src);
-		imshow("fix", img);
+		// confim traffic sign
+		flag = true;
+		CountFrame = 1;
+		return sign;
 	}
-	return res;
+
+	return 0; // can't confim traffic sign
 }
