@@ -19,6 +19,8 @@ line_function.h
 /home/haimeohung/Destiny/src/lane_detect/include/line_function.h
 lane_detect.h
 /home/haimeohung/Destiny/src/lane_detect/include/lane_detect.h
+object_detect.h
+/home/haimeohung/Destiny/src/lane_detect/include/object_detect.h
 math.h
 /home/haimeohung/Destiny/src/lane_detect/include/math.h
 vector
@@ -35,8 +37,16 @@ iostream
 -
 
 /home/haimeohung/Destiny/src/lane_detect/include/line_function.h
+iostream
+-
 opencv/cv.h
 -
+
+/home/haimeohung/Destiny/src/lane_detect/include/object_detect.h
+line_function.h
+/home/haimeohung/Destiny/src/lane_detect/include/line_function.h
+lane_detect.h
+/home/haimeohung/Destiny/src/lane_detect/include/lane_detect.h
 
 /home/haimeohung/Destiny/src/lane_detect/include/traffic_sign.h
 opencv2/highgui/highgui.hpp
@@ -59,6 +69,10 @@ lane_detect.h
 /home/haimeohung/Destiny/src/lane_detect/src/line_function.cpp
 line_function.h
 /home/haimeohung/Destiny/src/lane_detect/src/line_function.h
+
+/home/haimeohung/Destiny/src/lane_detect/src/object_detect.cpp
+object_detect.h
+/home/haimeohung/Destiny/src/lane_detect/src/object_detect.h
 
 /home/haimeohung/Destiny/src/lane_detect/src/traffic_sign.cpp
 traffic_sign.h

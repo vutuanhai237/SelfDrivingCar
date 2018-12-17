@@ -455,6 +455,33 @@ src/main.cpp.s:
 	cd /home/haimeohung/Destiny/build && $(MAKE) -f lane_detect/CMakeFiles/lane_detect.dir/build.make lane_detect/CMakeFiles/lane_detect.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/object_detect.o: src/object_detect.cpp.o
+
+.PHONY : src/object_detect.o
+
+# target to build an object file
+src/object_detect.cpp.o:
+	cd /home/haimeohung/Destiny/build && $(MAKE) -f lane_detect/CMakeFiles/api_lane_detect.dir/build.make lane_detect/CMakeFiles/api_lane_detect.dir/src/object_detect.cpp.o
+.PHONY : src/object_detect.cpp.o
+
+src/object_detect.i: src/object_detect.cpp.i
+
+.PHONY : src/object_detect.i
+
+# target to preprocess a source file
+src/object_detect.cpp.i:
+	cd /home/haimeohung/Destiny/build && $(MAKE) -f lane_detect/CMakeFiles/api_lane_detect.dir/build.make lane_detect/CMakeFiles/api_lane_detect.dir/src/object_detect.cpp.i
+.PHONY : src/object_detect.cpp.i
+
+src/object_detect.s: src/object_detect.cpp.s
+
+.PHONY : src/object_detect.s
+
+# target to generate assembly for a file
+src/object_detect.cpp.s:
+	cd /home/haimeohung/Destiny/build && $(MAKE) -f lane_detect/CMakeFiles/api_lane_detect.dir/build.make lane_detect/CMakeFiles/api_lane_detect.dir/src/object_detect.cpp.s
+.PHONY : src/object_detect.cpp.s
+
 src/traffic_sign.o: src/traffic_sign.cpp.o
 
 .PHONY : src/traffic_sign.o
@@ -519,6 +546,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/object_detect.o"
+	@echo "... src/object_detect.i"
+	@echo "... src/object_detect.s"
 	@echo "... src/traffic_sign.o"
 	@echo "... src/traffic_sign.i"
 	@echo "... src/traffic_sign.s"

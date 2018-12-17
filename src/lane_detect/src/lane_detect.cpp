@@ -14,7 +14,6 @@ Mat LaneDetect::ReduceNoise(const Mat &src)
 	des.copyTo(draw);
 	//draw.release();
 	rectangle(draw, Rect(0, 0, draw.cols, draw.rows), Scalar(0, 0, 0), -1);
-
 	cvtColor(des, des, COLOR_RGB2GRAY);
 	GaussianBlur(src, src, Size(BlurValue, BlurValue), 0, 0, BORDER_DEFAULT);
 	return des;
@@ -46,7 +45,7 @@ void LaneDetect::FindLane(const Mat &BinarySrc)
 		for (int i = MidLane - IgnoreFromMid(high); i > Box.width; i = i - (Box.width >> 1))
 		{
 			Mat box = Mat(BinarySrc, Rect(i, high, Box.width, Box.height));
-			if (countNonZero(box) * 100 > Box.area() * Accuracy)
+			if (countNonZero(box) * 100 > Box.area()*Accuracy)
 			{
 				LaneL.push_back(Point(i, high));
 				saveL = i;
@@ -57,7 +56,7 @@ void LaneDetect::FindLane(const Mat &BinarySrc)
 		for (int i = MidLane + IgnoreFromMid(high); i < BinarySrc.cols - Box.width; i = i + (Box.width >> 1))
 		{
 			Mat box = Mat(BinarySrc, Rect(i, high, Box.width, Box.height));
-			if (countNonZero(box) * 100 > Box.area() * Accuracy)
+			if (countNonZero(box) * 100 > Box.area()*Accuracy)
 			{
 				LaneR.push_back(Point(i, high));
 				saveR = i;
@@ -65,15 +64,14 @@ void LaneDetect::FindLane(const Mat &BinarySrc)
 			}
 		}
 		// Update new mid lane
-		if (saveL * saveR > 0)
+		if (saveL*saveR > 0)
 		{
-			MidLane = MidLane * alpha + ((saveL + saveR) >> 1) * (1 - alpha);
-			LaneM.push_back(Point(MidLane, high));
+			MidLane = MidLane * alpha + ((saveL + saveR) >> 1)*(1 - alpha);
 		}
 	}
 }
 
-void LaneDetect::Detect(const Mat &src)
+void LaneDetect::Detect(const Mat & src)
 {
 	FindLane(CvtBinary(ReduceNoise(src)));
 }
@@ -81,12 +79,35 @@ void LaneDetect::Detect(const Mat &src)
 void LaneDetect::DrawLane()
 {
 	for (int i = 0; i < LaneL.size(); i++)
-		circle(draw, LaneL[i], 2, Scalar(255, 0, 0), 2, 8, 0);
+		circle(draw, LaneL[i], 2, Scalar(255, 0, 0), 2,8,0);
 	for (int i = 0; i < LaneR.size(); i++)
 		circle(draw, LaneR[i], 2, Scalar(0, 255, 0), 2, 8, 0);
-	for (int i = 0; i < LaneM.size(); i++)
-		circle(draw, LaneM[i], 2, Scalar(255, 255, 255), 2, 8, 0);
+	//for (int i = 0; i < LaneM.size(); i++)
+	//	circle(draw, LaneM[i], 2, Scalar(255, 255, 255), 2, 8, 0);
 	imshow("Lane detect", draw);
+}
+
+void LaneDetect::UpdateMidLane()
+{
+	int i = 0;
+	int j = 0;
+	while (i < LaneL.size() && j < LaneR.size())
+	{
+		while (i < LaneL.size() && LaneL[i].y > LaneR[j].y)
+			i++;
+		if (i == LaneL.size())
+			return;
+		while (j < LaneR.size() && LaneR[j].y > LaneL[i].y)
+			j++;
+		if (j == LaneR.size())
+			return;
+		if (LaneL[i].y == LaneR[j].y)
+		{
+			LaneM.push_back(Point((LaneL[i].x + LaneR[j].x) >> 1, LaneL[i].y));
+			i++;
+			j++;
+		}
+	}
 }
 
 LaneDetect::~LaneDetect()
@@ -100,5 +121,5 @@ LaneDetect::~LaneDetect()
 // Other function
 int LaneDetect::IgnoreFromMid(int h)
 {
-	return int(LaneDetect::Fx_a * h + LaneDetect::Fx_b);
+	return int(LaneDetect::Fx_a*h + LaneDetect::Fx_b);
 }

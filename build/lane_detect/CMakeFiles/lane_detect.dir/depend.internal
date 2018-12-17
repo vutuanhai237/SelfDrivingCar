@@ -5,6 +5,7 @@ lane_detect/CMakeFiles/lane_detect.dir/src/main.cpp.o
  /home/haimeohung/Destiny/src/lane_detect/include/car_control.h
  /home/haimeohung/Destiny/src/lane_detect/include/lane_detect.h
  /home/haimeohung/Destiny/src/lane_detect/include/line_function.h
+ /home/haimeohung/Destiny/src/lane_detect/include/object_detect.h
  /home/haimeohung/Destiny/src/lane_detect/include/setting.h
  /home/haimeohung/Destiny/src/lane_detect/include/traffic_sign.h
  /home/haimeohung/Destiny/src/lane_detect/src/main.cpp

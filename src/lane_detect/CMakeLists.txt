@@ -68,6 +68,7 @@ add_library(api_lane_detect
    src/car_control.cpp
    src/line_function.cpp
    src/traffic_sign.cpp
+   src/object_detect.cpp
 )
 
 add_executable(lane_detect src/main.cpp)

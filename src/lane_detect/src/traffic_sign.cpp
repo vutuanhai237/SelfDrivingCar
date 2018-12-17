@@ -14,7 +14,7 @@ void TrafficSign::Setting()
 	cvCreateTrackbar("HighS", "Setting", &iHighS, 255);
 }
 
-int TrafficSign::Find(Mat &src)
+int TrafficSign::Find(Mat & src)
 {
 	return CheckSign(ThresholdDetection(src, PreFix(src)));
 }
@@ -114,13 +114,14 @@ int TrafficSign::CheckSign(const Mat &src)
 		OldSign = sign;
 		CountFrame = 1;
 	}
-	else if (sign = OldSign)
-		TrafficSign::CountFrame++;
 	else
-	{
-		OldSign = sign;
-		CountFrame = 1;
-	}
+		if (sign = OldSign)
+			TrafficSign::CountFrame++;
+		else
+		{
+			OldSign = sign;
+			CountFrame = 1;
+		}
 	if (TrafficSign::CountFrame > TrafficSign::LockFlag)
 	{
 		// confim traffic sign

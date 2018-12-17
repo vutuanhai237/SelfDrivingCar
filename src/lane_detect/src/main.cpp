@@ -29,7 +29,7 @@ void call_back(const sensor_msgs::ImageConstPtr &msg)
         ros.width = 320;
         out = cv_ptr->image(ros);
         cout << sign->Find(out);
-        car->driverCar(LaneDetect::LaneL, LaneDetect::LaneR, LaneDetect::LaneM, sign->Find(out));
+        car->driverCar();
         
     }
     catch(Exception e)
@@ -55,8 +55,8 @@ void VideoProcess()
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "image_listener");
-    cv::namedWindow("Binary");
-    cv::namedWindow("Lane Detect");
+    //cv::namedWindow("Binary");
+    //cv::namedWindow("Lane Detect");
 
     detect = new LaneDetect();
     car = new CarControl();

@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/haimeohung/Destiny/src/lane_detect/src/car_control.cpp" "/home/haimeohung/Destiny/build/lane_detect/CMakeFiles/api_lane_detect.dir/src/car_control.cpp.o"
   "/home/haimeohung/Destiny/src/lane_detect/src/lane_detect.cpp" "/home/haimeohung/Destiny/build/lane_detect/CMakeFiles/api_lane_detect.dir/src/lane_detect.cpp.o"
   "/home/haimeohung/Destiny/src/lane_detect/src/line_function.cpp" "/home/haimeohung/Destiny/build/lane_detect/CMakeFiles/api_lane_detect.dir/src/line_function.cpp.o"
+  "/home/haimeohung/Destiny/src/lane_detect/src/object_detect.cpp" "/home/haimeohung/Destiny/build/lane_detect/CMakeFiles/api_lane_detect.dir/src/object_detect.cpp.o"
   "/home/haimeohung/Destiny/src/lane_detect/src/traffic_sign.cpp" "/home/haimeohung/Destiny/build/lane_detect/CMakeFiles/api_lane_detect.dir/src/traffic_sign.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
