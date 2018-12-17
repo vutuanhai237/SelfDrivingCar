@@ -70,7 +70,6 @@ void LaneDetect::FindLane(const Mat &BinarySrc)
 		if (saveL*saveR > 0)
 		{
 			MidLane = MidLane * alpha + ((saveL + saveR) >> 1)*(1 - alpha);
-			LaneM.push_back(Point(MidLane, high));
 		}
 	}
 }
@@ -86,9 +85,32 @@ void LaneDetect::DrawLane()
 		circle(draw, LaneL[i], 2, Scalar(255, 0, 0), 2,8,0);
 	for (int i = 0; i < LaneR.size(); i++)
 		circle(draw, LaneR[i], 2, Scalar(0, 255, 0), 2, 8, 0);
-	for (int i = 0; i < LaneM.size(); i++)
-		circle(draw, LaneM[i], 2, Scalar(255, 255, 255), 2, 8, 0);
+	//for (int i = 0; i < LaneM.size(); i++)
+	//	circle(draw, LaneM[i], 2, Scalar(255, 255, 255), 2, 8, 0);
 	imshow("Lane detect", draw);
+}
+
+void LaneDetect::UpdateMidLane()
+{
+	int i = 0;
+	int j = 0;
+	while (i < LaneL.size() && j < LaneR.size())
+	{
+		while (i < LaneL.size() && LaneL[i].y > LaneR[j].y)
+			i++;
+		if (i == LaneL.size())
+			return;
+		while (j < LaneR.size() && LaneR[j].y > LaneL[i].y)
+			j++;
+		if (j == LaneR.size())
+			return;
+		if (LaneL[i].y == LaneR[j].y)
+		{
+			LaneM.push_back(Point((LaneL[i].x + LaneR[j].x) >> 1, LaneL[i].y));
+			i++;
+			j++;
+		}
+	}
 }
 
 LaneDetect::~LaneDetect()

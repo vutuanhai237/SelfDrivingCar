@@ -1,6 +1,7 @@
 #pragma once
 #include "LineFunction.h"
 #include "LaneDetect.h"
+#include "ObjectDetect.h"
 
 class CarControl
 {
@@ -17,10 +18,12 @@ private:
 	static double OldAngle; // Angle that old frame return
 	static const float Alpha; // The greater value, the most of change on SizeLane
 	static int SizeLane; // Size of lane at line detecte
-	Line MostAccurateLane(const vector<Point> &Lane);
-	void IgnoreNoise(Line line, vector<Point> &Lane);
 	void UpdateSizeLane(int NewSizeLane);
+
+	static const int MinSpeed;
+	static const int MaxSpeed;
 	double Fx(int x);
 public:
-	double GetAngle(const vector <Point> &LaneL, const vector<Point> &LaneR, const vector<Point> &LaneM);
+	double GetAngle();
+	int GetSpeed(const double &angle);	
 };

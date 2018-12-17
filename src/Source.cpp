@@ -10,7 +10,7 @@ int main()
 	CarControl car;
 	lane.Setting();
 
-	VideoCapture camera("test.mp4");
+	VideoCapture camera("test shadow.mp4");
 	while (true)
 	{
 		Mat img;
@@ -18,9 +18,11 @@ int main()
 		if (img.empty())
 			break;
 		lane.Detect(img);
+		//lane.DrawLane();
+		double angle = car.GetAngle();
+		cout << sign.Find(img) << "\t\t" << angle << "\t\t" << car.GetSpeed(angle) << endl;
 		lane.DrawLane();
-		cout << sign.Find(img) << "\t\t" << car.GetAngle(LaneDetect::LaneL, LaneDetect::LaneR, LaneDetect::LaneM)<< endl;
-
+		imshow("Lane detect", LaneDetect::draw);
 		if (waitKey(30) == 27)
 			break;
 	}

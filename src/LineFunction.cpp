@@ -51,10 +51,44 @@ double LineFunction::Angle(const Point &p, const Point &CarLoction)
 {
 	double dx = p.x - CarLoction.x;
 	double dy = CarLoction.y - p.y;
-	return -atan(dx / dy)*(180 / acos(-1));
+	return atan(dx / dy)*(180 / acos(-1));
 }
 
 int LineFunction::ReturnX(const Line &line, const double &y)
 {
 	return -(line.b*y + line.c) / line.a;
+}
+
+Line LineFunction::Linear(const vector<Point> &p)
+{
+	Line line;
+	Line res;
+	res.a = 0;
+	res.b = 0;
+	res.c = 0;
+	double deviation;
+	double min = numeric_limits<double>::max();
+
+	if (p.size() < 1)
+		return res;
+
+	// Consider each pair of points
+	for (int i = 0; i < p.size() - 1; i++) // Unknow error: loot infinity when size of vector <= 1
+	{
+		for (int j = i + 1; j < p.size(); j++)
+		{
+			deviation = 0;
+			// Create a linear equations
+			line = CaculateLine(p[i], p[j]);
+			// Caculate total deviation
+			for (int k = 0; k < p.size(); k++)
+				deviation += Distance(line, p[k]);
+			if (deviation < min)
+			{
+				min = deviation;
+				res = line;
+			}
+		}
+	}
+	return res;
 }

@@ -1,5 +1,5 @@
 #pragma once
-/*   ---TrafficSign.h---   */
+/*     ---TrafficSign.h---     */
 #include "TrafficSign.h"
 int TrafficSign::OldSign = 0;
 int TrafficSign::CountFrame = 0;
@@ -12,7 +12,7 @@ int TrafficSign::iHighL = 150;
 int TrafficSign::iLowS = 80;
 int TrafficSign::iHighS = 255;
 
-/*   ---LaneDetect.h---   */
+/*     ---LaneDetect.h---     */
 #include "LaneDetect.h"
 const int LaneDetect::SkyLine = 80;  // 80 = 1/3 rows
 const Size LaneDetect::Box(5, 5);
@@ -30,11 +30,11 @@ vector<Point> LaneDetect::LaneR{ Point(0, 0) };
 vector<Point> LaneDetect::LaneM{ Point(0, 0) };
 Mat LaneDetect::draw = Mat();
 
-/*   ---CarControl.h---   */
+/*     ---CarControl.h---     */
 #include "CarControl.h"
 const double CarControl::FxSize_a = 2.43095169; // F(x) = ax + b; a=2.43095169
 const double CarControl::FxSize_b = 34.412556; // F(x) = ax + b; b=34.412556
-const int CarControl::LineDetect = 50; // Location of Y-axis position where the car try going to
+const int CarControl::LineDetect = 35; // Location of Y-axis position where the car try going to
 
 const double CarControl::LimitDistance = 3.0; // The value represent for noise on lane detecte. The the greater value, the greater noise receive
 const int CarControl::TooFew = 3; // The value decition when too few point to determine a lane
@@ -45,3 +45,13 @@ Point CarControl::CarLocation = Point(320 >> 1, 160);
 double CarControl::OldAngle = 0; // Angle that old frame return
 const float CarControl::Alpha = 0.25; // the greater value, the most of change on SizeLane
 int CarControl::SizeLane = 40; // Size of lane
+
+const int CarControl::MaxSpeed = 60;
+const int CarControl::MinSpeed = 35;
+
+/*     ---ObjectDetect.h---     */
+#include "ObjectDetect.h"
+const double ObjectDetect::LimitDistance = 3.0; // The value represent for noise on lane detecte. The the greater value, the greater noise receive
+const int ObjectDetect::LostCount = 3; // noise LostCount point => have object
+Line ObjectDetect::laneL(0, 0, 0);
+Line ObjectDetect::laneR(0, 0, 0);

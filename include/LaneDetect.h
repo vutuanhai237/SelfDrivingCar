@@ -12,7 +12,6 @@ class LaneDetect
 #pragma region Setting value
 private:
 	static const int SkyLine; // =80
-	static const Size Box; // 5x5 - Box detetion lane
 	static const float alpha;
 
 	static int BlurValue;
@@ -20,6 +19,7 @@ private:
 
 	static int Accuracy;
 public:
+	static const Size Box; // 5x5 - Box detetion lane
 	static double Fx_a;
 	static double Fx_b;
 #pragma endregion
@@ -34,6 +34,7 @@ public:
 	void Setting();
 	void Detect(const Mat &src);
 	void DrawLane();
+	void UpdateMidLane();
 	~LaneDetect();
 private:
 	Mat ReduceNoise(const Mat &src);
