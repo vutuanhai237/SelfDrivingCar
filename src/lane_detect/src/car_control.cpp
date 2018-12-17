@@ -2,73 +2,95 @@
 
 CarControl::CarControl()
 {
-	this->carPos.x = 120;
-    this->carPos.y = 300;
-    this->angle_publisher = node_obj1.advertise<std_msgs::Float32>("Destiny_Angle", 0);
-    this->speed_publisher = node_obj2.advertise<std_msgs::Float32>("Destiny_Speed", 0);
+	carPos.x = 120;
+	carPos.y = 300;
+	angle_publisher = node_obj1.advertise<std_msgs::Float32>("Team1_steerAngle", 0);
+	speed_publisher = node_obj2.advertise<std_msgs::Float32>("Team1_speed", 0);
 }
-CarControl::~CarControl(){}
+CarControl::~CarControl() {}
+
+float CarControl::errorAngle(const Point &dst)
+{
+	//dst là center point cần phải đi đến
+	//nếu xe đã ở vị trí center point x thì ko cần phải xoay bánh lái nữa
+	if (dst.x == carPos.x)
+		return 0;
+	if (dst.y == carPos.y)
+		return (dst.x < carPos.x ? -90 : 90);
+	// lấy pi
+	double pi = acos(-1.0);
+	double dx = dst.x - carPos.x;
+	double dy = carPos.y - dst.y;
+	//tính góc xoay
+	if (dx < 0)
+		return -atan(-dx / dy) * 180 / pi;
+	return atan(dx / dy) * 180 / pi;
+}
 void CarControl::driverCar(const vector<Point> &LaneL, const vector<Point> &LaneR, const vector<Point> &LaneM, int CheckSign)
 {
-	int i;
+	int i = LaneM.size() - 2;
 	float error;
-    float setError;
-    float velocity;
-    int delta = 10;
-    Point dst, predst;
-    
+	float setError;
+	float velocity;
+	int delta = 10;
+	Point dst, predst;
 
-   
-	if (CheckSign == -1)
+	// if (CheckSign == -1)
+	// {
+	//
+	// }
+	// else if (CheckSign == 1)
+	// {
+	//
+	// }
+	// else
+	// {
+	if (LaneL[i] == LaneDetect::null && LaneR[i] == LaneDetect::null)
 	{
-
-	}
-	else if (CheckSign == 1)
-	{
-
+		i--;
+		if (i < 0)
+			return;
 	}
 	else
 	{
-		if (LaneL[i] == LaneDetect::null && LaneR[i] == LaneDetect::null)
-        {         
-            i--;
-            if (i < 0)
-              return;
-        }
-        else
-        {
-            //Không mất làn
-            if (LaneL[i] != LaneDetect::null && LaneR[i] != LaneDetect::null)
-            {
-                dst = (LaneL[i] + LaneR[i]) / 2;
-                error = CarControl::GetAngle(LaneL, LaneR, LaneM);
-            }
-            //Mất làn phải
-            else if (LaneL[i] != LaneDetect::null)
-            {
-              
-            }
-            //Mất làn trái
-            else
-            {
+		//Không mất làn
+		if (LaneL[i] != LaneDetect::null && LaneR[i] != LaneDetect::null)
+		{
+			dst = (LaneL[i] + LaneR[i]) / 2;
+			error = CarControl::GetAngle(LaneL, LaneR, LaneM);
+		}
+		//Mất làn phải
+		else if (LaneL[i] != LaneDetect::null)
+		{
+			dst.x = LaneL[i].x + int(SizeLane) * 1 / 2 - 20;
+			//dst.x = predst.x + preRight.x - right[i].x;
+			dst.y = 5;
 
-            }
-        }
-    }
+			error = errorAngle(dst);
+		}
+		//Mất làn trái
+		else
+		{
+			dst.x = LaneR[i].x - int(SizeLane) * 1 / 2 - 20;
+			//dst.x = predst.x + preRight.x - right[i].x;
+			dst.y = 5;
+			error = errorAngle(dst);
+		}
+	}
+	//}
 
-    velocity = 55 - error * 3;
-    if (velocity < 30)
-        velocity = 30;
+	velocity = 55 - error * 3;
+	if (velocity < 30)
+		velocity = 30;
 
-    std_msgs::Float32 angle;
-    std_msgs::Float32 speed;
+	std_msgs::Float32 angle;
+	std_msgs::Float32 speed;
 
-    angle.data = error;
-    speed.data = velocity;
+	angle.data = error;
+	speed.data = velocity;
 
-    angle_publisher.publish(angle);
-    speed_publisher.publish(speed);
-
+	angle_publisher.publish(angle);
+	speed_publisher.publish(speed);
 }
 double CarControl::GetAngle(const vector<Point> &LaneL, const vector<Point> &LaneR, const vector<Point> &LaneM)
 {
@@ -140,6 +162,3 @@ void CarControl::UpdateSizeLane(int NewSizeLane)
 {
 	SizeLane = SizeLane * (1 - Alpha) + NewSizeLane * Alpha;
 }
-
-
-

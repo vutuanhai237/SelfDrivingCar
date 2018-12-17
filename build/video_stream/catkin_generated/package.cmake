@@ -1,6 +1,6 @@
 set(_CATKIN_CURRENT_PACKAGE "video_stream")
 set(video_stream_VERSION "0.0.0")
-set(video_stream_MAINTAINER "iot <iot@todo.todo>")
+set(video_stream_MAINTAINER "iot <17520433@gm.uit.vn>")
 set(video_stream_PACKAGE_FORMAT "2")
 set(video_stream_BUILD_DEPENDS "cv_bridge" "image_transport" "roscpp" "sensor_msgs")
 set(video_stream_BUILD_EXPORT_DEPENDS "cv_bridge" "image_transport" "roscpp" "sensor_msgs")

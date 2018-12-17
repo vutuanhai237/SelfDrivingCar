@@ -51,7 +51,7 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES api_lane_detect
   CATKIN_DEPENDS roscpp
-  DEPENDS system_lib
+  #DEPENDS system_lib
 )
 
 ###########

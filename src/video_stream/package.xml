@@ -3,7 +3,7 @@
   <name>video_stream</name>
   <version>0.0.0</version>
   <description>The video_stream package</description>
-  <maintainer email="iot@todo.todo">iot</maintainer>
+  <maintainer email="17520433@gm.uit.vn">iot</maintainer>
   <license>TODO</license>
 
   <buildtool_depend>catkin</buildtool_depend>

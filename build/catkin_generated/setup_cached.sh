@@ -7,10 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/haimeohung/Destiny/devel:$CMAKE_PREFIX_PATH"
-export LD_LIBRARY_PATH="/home/haimeohung/Destiny/devel/lib:$LD_LIBRARY_PATH"
-export PKG_CONFIG_PATH="/home/haimeohung/Destiny/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD="/home/haimeohung/Destiny/build"
-export PYTHONPATH="/home/haimeohung/Destiny/devel/lib/python2.7/dist-packages:$PYTHONPATH"
-export ROSLISP_PACKAGE_DIRECTORIES="/home/haimeohung/Destiny/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
-export ROS_PACKAGE_PATH="/home/haimeohung/Destiny/src:$ROS_PACKAGE_PATH"

@@ -37,6 +37,7 @@ class CarControl
   public:
     CarControl();
     ~CarControl();
+    float errorAngle(const Point &dst);
     double GetAngle(const vector<Point> &LaneL, const vector<Point> &LaneR, const vector<Point> &LaneM);
     void driverCar(const vector<Point> &LaneL, const vector<Point> &LaneR, const vector<Point> &LaneM, int CheckSign);
 };
