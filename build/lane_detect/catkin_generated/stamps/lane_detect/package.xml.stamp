@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>lane_detect</name>
+  <version>0.0.0</version>
+  <description>The lane_detect package</description>
+  <maintainer email="17520433@gm.uit.edu.vn">VuTuanHai</maintainer>
+  <maintainer email="17520096@gm.uit.edu.vn">NguyenDuLich</maintainer>
+  <maintainer email="17520350@gm.uit.edu.vn">NguyenVanDong</maintainer>
+  <license>BSD</license>
+  
+  <!-- build tool-->
+  <buildtool_depend>catkin</buildtool_depend>
+  <!-- build depend -->
+  <build_depend>roscpp</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <!-- build export depend -->
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>cv_bridge</build_export_depend>
+  <build_export_depend>image_transport</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <!--exec depend -->
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+  <exec_depend>image_transport</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+
+  <export>
+  </export>
+</package>
