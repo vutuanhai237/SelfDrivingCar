@@ -10,7 +10,8 @@
 #include "line_function.h"
 #include "lane_detect.h"
 #include "object_detect.h"
-#include "math.h"
+#include "traffic_sign.h"
+#include "time.h"
 #include <vector>
 class CarControl
 {
@@ -29,19 +30,21 @@ private:
 	static int SizeLane; // Size of lane at line detecte
 	void UpdateSizeLane(int NewSizeLane);
 
-	static const int MinSpeed;
-	static const int MaxSpeed;
-
   ros::NodeHandle node_obj1;
   ros::NodeHandle node_obj2;
   ros::Publisher angle_publisher;
   ros::Publisher speed_publisher;
+public:
+	static int MinSpeed;
+	static int MaxSpeed;
+private:
 	double Fx(int x);
+	double ReduceAngle(const double &angle);
 public:
   CarControl();
   ~CarControl();
 	double GetAngle();
 	int GetSpeed(const double &angle);	
-  void driverCar();
+  void driverCar(Mat & out);
 
 };

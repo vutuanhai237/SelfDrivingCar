@@ -1,10 +1,14 @@
 #pragma once
 /*     ---TrafficSign.h---     */
 #include "traffic_sign.h"
+int TrafficSign::Sign = 0; // -1 is turn left; 1 is turn right; 0 is nothing
 int TrafficSign::OldSign = 0;
 int TrafficSign::CountFrame = 0;
 bool TrafficSign::flag = false;
-// threshold of sign
+const int TrafficSign::LockFlag = 6; // 10 frame - after 10 frame detect a same sign, lock that result and stop detect
+const int TrafficSign::UnlockFlag = 50; // ~2s
+const int TrafficSign::MinSquare = 180; // 200 pixel - That is a size that use for identifi sign
+// threshold of signd
 int TrafficSign::iLowH = 70;
 int TrafficSign::iHighH = 120;
 int TrafficSign::iLowL = 65;
@@ -46,8 +50,8 @@ double CarControl::OldAngle = 0; // Angle that old frame return
 const float CarControl::Alpha = 0.25; // the greater value, the most of change on SizeLane
 int CarControl::SizeLane = 40; // Size of lane
 
-const int CarControl::MaxSpeed = 60;
-const int CarControl::MinSpeed = 35;
+int CarControl::MaxSpeed = 80;
+int CarControl::MinSpeed = 45;
 
 /*     ---ObjectDetect.h---     */
 #include "object_detect.h"

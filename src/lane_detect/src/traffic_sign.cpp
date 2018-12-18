@@ -23,12 +23,13 @@ Mat TrafficSign::PreFix(const Mat &src)
 {
 	//imshow("Camera", src);
 	int iIgnoreObj = 1;
-	Mat des(src, Rect(src.cols >> 1, 0, src.cols >> 1, src.rows));
+	//Mat des(src, Rect(src.cols >> 0, 0, src.cols >> 0, src.rows));
 	//imshow("Real", des);
-	//cvtColor(src, des, COLOR_RGB2HLS);
+	//cvtColor(des, des, COLOR_RGB2HLS);
+	Mat des(src);
 	cvtColor(des, des, COLOR_BGR2HLS);
 
-	//imshow("HLS", des);
+	imshow("HLS", des);
 
 	GaussianBlur(des, des, Size(3, 3), 0);
 	inRange(des, Scalar(iLowH, iLowL, iLowS), Scalar(iHighH, iHighL, iHighS), des);
@@ -39,7 +40,7 @@ Mat TrafficSign::PreFix(const Mat &src)
 	dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
 	erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
 
-	//imshow("IHLS threshold", des);
+	imshow("IHLS threshold", des);
 
 	return des;
 }
@@ -91,6 +92,8 @@ int TrafficSign::CheckSign(const Mat &src)
 		{
 			TrafficSign::CountFrame = 0;
 			TrafficSign::flag = false;
+			TrafficSign::Sign = 0;
+			CarControl::MaxSpeed = 80;
 		}
 		else
 		{
@@ -127,6 +130,8 @@ int TrafficSign::CheckSign(const Mat &src)
 		// confim traffic sign
 		flag = true;
 		CountFrame = 1;
+		TrafficSign::Sign = sign;
+		CarControl::MaxSpeed = CarControl::MinSpeed;
 		return sign;
 	}
 

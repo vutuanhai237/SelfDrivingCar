@@ -1,6 +1,7 @@
 #pragma once
 #include "line_function.h"
 #include "lane_detect.h"
+#include "traffic_sign.h"
 
 class ObjectDetect
 {
@@ -15,7 +16,7 @@ private:
 	void IgnoreNoise(Line line, vector<Point> &lane);
 	bool FindObject(Line line, const vector<Point> &lane);
 public:
-    ObjectDetect();
-    ~ObjectDetect();
+	ObjectDetect();
+	~ObjectDetect();
 	void ClearObject();
 };

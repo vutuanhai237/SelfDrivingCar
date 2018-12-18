@@ -14,6 +14,8 @@ void ObjectDetect::IgnoreNoise(Line line, vector<Point> &lane)
 
 bool ObjectDetect::FindObject(Line line, const vector<Point> &lane)
 {
+	if (lane.size() < 2)
+		return true;
 	int distance = (LaneDetect::Box.width >> 1)*LostCount;
 	for (int i = 1; i < lane.size(); i++)
 		if (lane[i].y - lane[i - 1].y >= LostCount)
@@ -23,9 +25,15 @@ bool ObjectDetect::FindObject(Line line, const vector<Point> &lane)
 
 void ObjectDetect::ClearObject()
 {
+	if (TrafficSign::Sign != 0)
+		if (TrafficSign::Sign == 1)
+			LaneDetect::LaneL.clear();
+		else
+			LaneDetect::LaneR.clear();
+	
 	LineFunction F;
 	laneL = F.Linear(LaneDetect::LaneL);
-	laneR = F.Linear(LaneDetect::LaneL);
+	laneR = F.Linear(LaneDetect::LaneR);
 
 	//IgnoreNoise(laneL, LaneDetect::LaneL);
 	//IgnoreNoise(laneR, LaneDetect::LaneR);

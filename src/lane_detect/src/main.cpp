@@ -18,18 +18,20 @@ void call_back(const sensor_msgs::ImageConstPtr &msg)
     {
         cv::Mat out;
         cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
-        //cv::imshow("View", cv_ptr->image);
-        waitKey(10);
-        detect->Detect(cv_ptr->image);
-        detect->DrawLane();
-        cv::Rect ros; 
+         cv::Rect ros; 
         ros.x = 0;
         ros.y = 0;
         ros.height = 240;
         ros.width = 320;
+
         out = cv_ptr->image(ros);
-        cout << sign->Find(out);
-        car->driverCar();
+        //cv::imshow("View", cv_ptr->image);
+        waitKey(10);
+        detect->Detect(cv_ptr->image);
+        sign->Find(cv_ptr->image);
+        detect->DrawLane();
+       
+        car->driverCar(out);
         
     }
     catch(Exception e)
@@ -57,7 +59,9 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "image_listener");
     //cv::namedWindow("Binary");
     //cv::namedWindow("Lane Detect");
-
+    //TrafficSign *F;
+    //F->Setting();
+    detect->Setting();
     detect = new LaneDetect();
     car = new CarControl();
 
