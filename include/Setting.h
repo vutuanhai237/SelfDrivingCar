@@ -1,9 +1,13 @@
 #pragma once
 /*     ---TrafficSign.h---     */
 #include "TrafficSign.h"
+int TrafficSign::Sign = 0; // -1 is turn left; 1 is turn right; 0 is nothing
 int TrafficSign::OldSign = 0;
 int TrafficSign::CountFrame = 0;
 bool TrafficSign::flag = false;
+const int TrafficSign::LockFlag = 10; // 10 frame - after 10 frame detect a same sign, lock that result and stop detect
+const int TrafficSign::UnlockFlag = 50; // ~2s
+const int TrafficSign::MinSquare = 200; // 200 pixel - That is a size that use for identifi sign
 // threshold of sign
 int TrafficSign::iLowH = 70;
 int TrafficSign::iHighH = 120;

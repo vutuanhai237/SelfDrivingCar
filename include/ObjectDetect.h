@@ -1,6 +1,7 @@
 #pragma once
 #include "LineFunction.h"
 #include "LaneDetect.h"
+#include "TrafficSign.h"
 
 class ObjectDetect
 {

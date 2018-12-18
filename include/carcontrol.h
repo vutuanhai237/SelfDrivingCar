@@ -23,6 +23,7 @@ private:
 	static const int MinSpeed;
 	static const int MaxSpeed;
 	double Fx(int x);
+	double ReduceAngle(const double &angle);
 public:
 	double GetAngle();
 	int GetSpeed(const double &angle);	

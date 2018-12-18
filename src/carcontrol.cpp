@@ -10,6 +10,11 @@ double CarControl::Fx(int x)
 	return FxSize_a * x + FxSize_b;
 }
 
+double CarControl::ReduceAngle(const double & angle)
+{
+	return (CarControl::OldAngle*0.8 + angle * 0.2)*0.8;
+}
+
 double CarControl::GetAngle()
 {
 	Line res;
@@ -40,7 +45,7 @@ double CarControl::GetAngle()
 	L.UpdateMidLane();
 	res = F.Linear(LaneDetect::LaneM);
 	UpdateSizeLane(F.ReturnX(ObjectDetect::laneL, LineDetect) + F.ReturnX(ObjectDetect::laneR, LineDetect) >> 1);
-	OldAngle = F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect));
+	OldAngle = ReduceAngle(F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect)));
 	// draw
 	line(LaneDetect::draw, Point(F.ReturnX(res, 0), 0), Point(F.ReturnX(res, 160), 160), Scalar(255, 255, 255));
 	line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect), Scalar(0, 0, 255));
