@@ -10,7 +10,7 @@ int main()
 	CarControl car;
 	lane.Setting();
 
-	VideoCapture camera("test cua.mp4");
+	VideoCapture camera("test shadow.mp4");
 	while (true)
 	{
 		Mat img;

@@ -34,8 +34,8 @@ void ObjectDetect::ClearObject()
 	laneL = F.Linear(LaneDetect::LaneL);
 	laneR = F.Linear(LaneDetect::LaneR);
 
-	//IgnoreNoise(laneL, LaneDetect::LaneL);
-	//IgnoreNoise(laneR, LaneDetect::LaneR);
+	IgnoreNoise(laneL, LaneDetect::LaneL);
+	IgnoreNoise(laneR, LaneDetect::LaneR);
 
 	bool LostL = FindObject(laneL, LaneDetect::LaneL);
 	bool LostR = FindObject(laneR, LaneDetect::LaneR);

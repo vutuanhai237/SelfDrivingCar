@@ -28,6 +28,12 @@ Mat LaneDetect::CvtBinary(const Mat &src)
 	Laplacian(src, des, CV_16S, KernelSize);
 	convertScaleAbs(des, des);
 	threshold(des, des, 50, 255, THRESH_BINARY);
+	//morphological opening (removes small objects from the foreground)
+	erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(2, 2)));
+	dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(2, 2)));
+	//morphological closing (removes small holes from the foreground)
+	dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+	erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
 	imshow("Binary", des);
 	return des;
 }
