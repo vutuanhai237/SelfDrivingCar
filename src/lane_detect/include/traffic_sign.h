@@ -3,6 +3,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
+#include "car_control.h"
 
 using namespace cv;
 
@@ -16,11 +17,13 @@ class TrafficSign
 	static int iHighS;
 	static int iLowS;
 	static int CountFrame;
-	static const int MinSquare = 200; // 200 pixel - That is a size that use for 
-	static const int LockFlag = 10;// 10 frame - after 10 frame detect a same sign, lock that result and stop detect
-	static const int UnlockFlag = 50; // ~2s
+	static const int MinSquare; // 200 pixel - That is a size that use for identifi sign
+	static const int LockFlag; // 10 frame - after 10 frame detect a same sign, lock that result and stop detect
+	static const int UnlockFlag; // ~2s
 	static bool flag;
 	static int OldSign;
+public:
+	static int Sign; // -1 is turn left; 1 is turn right; 0 is nothing
 #pragma endregion
 public:
 	void Setting();
