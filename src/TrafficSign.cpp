@@ -21,9 +21,9 @@ int TrafficSign::Find(Mat & src)
 
 Mat TrafficSign::PreFix(const Mat &src)
 {
-	//imshow("Camera", src);
+	imshow("Camera", src);
 	int iIgnoreObj = 1;
-	Mat des(src, Rect(src.cols >> 1, 0, src.cols >> 1, src.rows));
+	Mat des(src, Rect(LeftLine, SkyLine, src.cols - LeftLine, (src.rows>>1) - SkyLine));
 	//imshow("Real", des);
 	//cvtColor(src, des, COLOR_RGB2HLS);
 	cvtColor(des, des, COLOR_BGR2HLS);
@@ -36,8 +36,8 @@ Mat TrafficSign::PreFix(const Mat &src)
 	erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
 	dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
 	//morphological closing (removes small holes from the foreground)
-	dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
-	erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
+	//dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
+	//erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
 
 	imshow("IHLS threshold", des);
 

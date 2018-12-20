@@ -18,7 +18,6 @@ int main()
 		if (img.empty())
 			break;
 		lane.Detect(img);
-		//lane.DrawLane();
 		double angle = car.GetAngle();
 		cout << sign.Find(img) << "\t\t" << angle << "\t\t" << car.GetSpeed(angle) << endl;
 		lane.DrawLane();

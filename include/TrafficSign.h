@@ -21,6 +21,9 @@ class TrafficSign
 	static const int UnlockFlag; // ~2s
 	static bool flag;
 	static int OldSign;
+
+	static const int SkyLine; // line x=SkyLine use for cut image
+	static const int LeftLine; // Line y=LeftLine use for cut image
 public:
 	static int Sign; // -1 is turn left; 1 is turn right; 0 is nothing
 #pragma endregion
