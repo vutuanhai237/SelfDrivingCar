@@ -1,5 +1,3 @@
-
-
 #include "LaneDetect.h"
 
 void LaneDetect::Setting()
@@ -48,7 +46,9 @@ void LaneDetect::FindLane(const Mat &BinarySrc)
 
 	int MidLane = BinarySrc.cols >> 1; // MidLane = car.location.x
 
-	for (int high = BinarySrc.rows - Box.height; high > 20; high = high - Box.height) // with a line
+	start = BinarySrc.rows - Box.height;
+
+	for (int high = start; high > 20; high = high - Box.height) // with a line
 	{
 		// Left lane
 		for (int i = MidLane - IgnoreFromMid(high); i > Box.width; i = i - (Box.width >> 1))
@@ -115,6 +115,45 @@ void LaneDetect::UpdateMidLane()
 			LaneM.push_back(Point((LaneL[i].x + LaneR[j].x) >> 1, LaneL[i].y));
 			i++;
 			j++;
+		}
+	}
+}
+
+void LaneDetect::DrawVirtualLane()
+{
+	LineFunction F;
+
+	if (TrafficSign::Sign == 1)
+	{
+		double LocX = 0;
+		double deltaX = Box.width*CarControl::TurnStrong;
+		if (LaneL.size() < TooFew || F.Angle(ObjectDetect::laneL) < 30)
+		{
+			LaneL.clear();
+			for (int i = start; i > 20; i = i - Box.height)
+			{
+				LaneL.push_back(Point(LocX, i));
+				LocX += deltaX;
+			}
+			ObjectDetect::laneL = F.CaculateLine(LaneL[0], LaneL[LaneL.size() - 1]);
+			return;
+		}
+	}
+
+	if (TrafficSign::Sign == -1)
+	{
+		double LocX = 320;
+		double deltaX = Box.width*CarControl::TurnStrong;
+		if (LaneR.size() < TooFew || F.Angle(ObjectDetect::laneR) > -30)
+		{
+			LaneR.clear();
+			for (int i = start; i > 20; i = i - Box.height)
+			{
+				LaneR.push_back(Point(LocX, i));
+				LocX -= deltaX;
+			}
+			ObjectDetect::laneR = F.CaculateLine(LaneR[0], LaneR[LaneR.size() - 1]);
+			return;
 		}
 	}
 }

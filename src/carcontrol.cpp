@@ -22,34 +22,36 @@ double CarControl::GetAngle()
 	LaneDetect L;
 	ObjectDetect O;
 	O.ClearObject();
+	L.DrawLane();
 	// Lost lane, kept old angle
-	if (LaneDetect::LaneL.size() + LaneDetect::LaneR.size() < (TooFew << 1))
+	if (LaneDetect::LaneL.size() + LaneDetect::LaneR.size() < (LaneDetect::TooFew << 1))
 		return OldAngle;
 	// Lost left lane, follow right lane
-	if (LaneDetect::LaneL.empty())
+	if (LaneDetect::LaneL.size() < LaneDetect::TooFew)
 	{
 		res = ObjectDetect::laneR;
-		OldAngle = F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect) - (SizeLane >> 2), LineDetect));
-		line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect) - (SizeLane >> 2), LineDetect), Scalar(0, 0, 255));
+		OldAngle = F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect) - (SizeLane >> 1), LineDetect));
+		line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect) - (SizeLane >> 1), LineDetect), Scalar(0, 0, 255));
 		return OldAngle;
 	}
 	// Lost right lane, follow left lane
-	if (LaneDetect::LaneR.empty())
+	if (LaneDetect::LaneR.size() < LaneDetect::TooFew)
 	{
 		res = ObjectDetect::laneL;
-		OldAngle = F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect) + (SizeLane >> 2), LineDetect));
-		line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect) + (SizeLane >> 2), LineDetect), Scalar(0, 0, 255));
+		OldAngle = F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect) + (SizeLane >> 1), LineDetect));
+		line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect) + (SizeLane >> 1), LineDetect), Scalar(0, 0, 255));
 		return OldAngle;
 	}
 	// no lost lane
 	L.UpdateMidLane();
 	res = F.Linear(LaneDetect::LaneM);
-	UpdateSizeLane(F.ReturnX(ObjectDetect::laneL, LineDetect) + F.ReturnX(ObjectDetect::laneR, LineDetect) >> 1);
+	if (TrafficSign::Sign == 0)
+		UpdateSizeLane(F.ReturnX(ObjectDetect::laneL, LineDetect) + F.ReturnX(ObjectDetect::laneR, LineDetect) >> 1);
 	OldAngle = ReduceAngle(F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect)));
 	// draw
 	line(LaneDetect::draw, Point(F.ReturnX(res, 0), 0), Point(F.ReturnX(res, 160), 160), Scalar(255, 255, 255));
 	line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect), Scalar(0, 0, 255));
-	L.DrawLane();
+
 	return OldAngle;
 }
 

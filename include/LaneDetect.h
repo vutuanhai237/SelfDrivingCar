@@ -3,6 +3,10 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include <opencv/cv.h>
 #include <iostream>
+#include "LineFunction.h"
+#include "TrafficSign.h"
+#include "ObjectDetect.h"
+#include "CarControl.h"
 
 using namespace cv;
 using namespace std;
@@ -24,7 +28,10 @@ public:
 	static double Fx_b;
 #pragma endregion
 #pragma region Lane
+private:
+	static int start;
 public:
+	static const int TooFew; // When too few point to detect lane => draw virtual lane
 	static vector<Point> LaneL;
 	static vector<Point> LaneR;
 	static vector<Point> LaneM;
@@ -35,6 +42,7 @@ public:
 	void Detect(const Mat &src);
 	void DrawLane();
 	void UpdateMidLane();
+	static void DrawVirtualLane();
 	~LaneDetect();
 private:
 	Mat ReduceNoise(const Mat &src);

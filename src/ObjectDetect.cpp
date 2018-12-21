@@ -24,15 +24,12 @@ bool ObjectDetect::FindObject(Line line, const vector<Point> &lane)
 
 void ObjectDetect::ClearObject()
 {
-	if (TrafficSign::Sign != 0)
-		if (TrafficSign::Sign == 1)
-			LaneDetect::LaneL.clear();
-		else
-			LaneDetect::LaneR.clear();
-	
 	LineFunction F;
 	laneL = F.Linear(LaneDetect::LaneL);
 	laneR = F.Linear(LaneDetect::LaneR);
+
+	if (TrafficSign::Sign != 0) // Turn right
+		LaneDetect::DrawVirtualLane();
 
 	IgnoreNoise(laneL, LaneDetect::LaneL);
 	IgnoreNoise(laneR, LaneDetect::LaneR);

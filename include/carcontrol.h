@@ -11,7 +11,7 @@ private:
 	static const int LineDetect; // Location of position where the car try going to
 
 	static const double LimitDistance; // The value represent for noise on lane detecte. The the greater value, the greater noise receive
-	static const int TooFew; // The value decition when too few point to determine a lane
+
 	static const double AngularCoefficient; // Decision how strong apply curve
 
 	static Point CarLocation;
@@ -19,7 +19,9 @@ private:
 	static const float Alpha; // The greater value, the most of change on SizeLane
 	static int SizeLane; // Size of lane at line detecte
 	void UpdateSizeLane(int NewSizeLane);
-
+public:
+	static const double TurnStrong; // Default is 1.5; > 1.5 mean turn more effect; < 1.5 mean turn least effect
+private:
 	static const int MinSpeed;
 	static const int MaxSpeed;
 	double Fx(int x);

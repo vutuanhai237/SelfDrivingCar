@@ -32,6 +32,8 @@ int LaneDetect::Accuracy = 55; // 55%
 double LaneDetect::Fx_a = double(6) / 13; //F(x) = ax + b; a = 5/13
 double LaneDetect::Fx_b = double(370) / 13; //F(x) = ax + b; b = 395/13
 
+int LaneDetect::start = 0;
+const int LaneDetect::TooFew = 7; // The value decition when too few point to determine a lane
 vector<Point> LaneDetect::LaneL{ Point(0, 0) };
 vector<Point> LaneDetect::LaneR{ Point(0, 0) };
 vector<Point> LaneDetect::LaneM{ Point(0, 0) };
@@ -44,13 +46,13 @@ const double CarControl::FxSize_b = 34.412556; // F(x) = ax + b; b=34.412556
 const int CarControl::LineDetect = 35; // Location of Y-axis position where the car try going to
 
 const double CarControl::LimitDistance = 3.0; // The value represent for noise on lane detecte. The the greater value, the greater noise receive
-const int CarControl::TooFew = 3; // The value decition when too few point to determine a lane
 const double CarControl::AngularCoefficient = 0.8; // Decision how strong apply curve
 
 Point CarControl::CarLocation = Point(320 >> 1, 160);
 
 double CarControl::OldAngle = 0; // Angle that old frame return
 const float CarControl::Alpha = 0.25; // the greater value, the most of change on SizeLane
+const double CarControl::TurnStrong = 2.0; // Default is 1.5; > 1.5 mean turn more effect; < 1.5 mean turn least effect
 int CarControl::SizeLane = 40; // Size of lane
 
 const int CarControl::MaxSpeed = 60;
