@@ -14,9 +14,9 @@ void TrafficSign::Setting()
 	cvCreateTrackbar("HighS", "Setting", &iHighS, 255);
 }
 
-int TrafficSign::Find(Mat & src)
+int TrafficSign::Find(const Mat & src)
 {
-	return CheckSign(ThresholdDetection(src, PreFix(src)));
+	return CheckSign(ThresholdDetection(LaneDetect::draw, PreFix(src)));
 }
 
 Mat TrafficSign::PreFix(const Mat &src)
@@ -29,9 +29,9 @@ Mat TrafficSign::PreFix(const Mat &src)
 	Mat des(src);
 	cvtColor(des, des, COLOR_BGR2HLS);
 
-	imshow("HLS", des);
+	//imshow("HLS", des);
 
-	GaussianBlur(des, des, Size(3, 3), 0);
+	//GaussianBlur(des, des, Size(3, 3), 0);
 	inRange(des, Scalar(iLowH, iLowL, iLowS), Scalar(iHighH, iHighL, iHighS), des);
 	//morphological opening (removes small objects from the foreground)
 	erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
@@ -40,7 +40,7 @@ Mat TrafficSign::PreFix(const Mat &src)
 	dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
 	erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(iIgnoreObj, iIgnoreObj)));
 
-	imshow("IHLS threshold", des);
+	//imshow("IHLS threshold", des);
 
 	return des;
 }
@@ -69,7 +69,7 @@ Mat TrafficSign::ThresholdDetection(Mat &draw, const Mat &Thres)
 	}
 	if (rec.area() < MinSquare)
 		return Mat(draw, Rect(0, 0, 1, 1));
-	rectangle(draw, Rect(rec.x, rec.y, rec.width, rec.height), Scalar(0, 0, 255));
+	rectangle(draw, Rect(rec.x + LeftLine, rec.y + SkyLine, rec.width, rec.height), Scalar(0, 0, 255));
 
 	//imshow("Real", draw);
 
@@ -93,7 +93,7 @@ int TrafficSign::CheckSign(const Mat &src)
 			TrafficSign::CountFrame = 0;
 			TrafficSign::flag = false;
 			TrafficSign::Sign = 0;
-			CarControl::MaxSpeed = 80;
+			CarControl::MaxSpeed = CarControl::DefMaxSpeed;
 		}
 		else
 		{

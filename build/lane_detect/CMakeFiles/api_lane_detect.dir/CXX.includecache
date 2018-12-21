@@ -37,6 +37,14 @@ opencv/cv.h
 -
 iostream
 -
+line_function.h
+/home/haimeohung/Destiny/src/lane_detect/include/line_function.h
+traffic_sign.h
+/home/haimeohung/Destiny/src/lane_detect/include/traffic_sign.h
+object_detect.h
+/home/haimeohung/Destiny/src/lane_detect/include/object_detect.h
+car_control.h
+/home/haimeohung/Destiny/src/lane_detect/include/car_control.h
 
 /home/haimeohung/Destiny/src/lane_detect/include/line_function.h
 iostream
@@ -63,6 +71,8 @@ opencv/highgui.h
 -
 car_control.h
 /home/haimeohung/Destiny/src/lane_detect/include/car_control.h
+lane_detect.h
+/home/haimeohung/Destiny/src/lane_detect/include/lane_detect.h
 
 /home/haimeohung/Destiny/src/lane_detect/src/car_control.cpp
 car_control.h

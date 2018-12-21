@@ -4,7 +4,7 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include "car_control.h"
-
+#include "lane_detect.h"
 using namespace cv;
 
 class TrafficSign
@@ -22,12 +22,15 @@ class TrafficSign
 	static const int UnlockFlag; // ~2s
 	static bool flag;
 	static int OldSign;
+
+	static const int SkyLine; // line x=SkyLine use for cut image
+	static const int LeftLine; // Line y=LeftLine use for cut image
 public:
 	static int Sign; // -1 is turn left; 1 is turn right; 0 is nothing
 #pragma endregion
 public:
 	void Setting();
-	int Find(Mat &src);
+	int Find(const Mat &src);
 private:
 	Mat PreFix(const Mat &src); // return a matrix Threshold for detection
 	Mat ThresholdDetection(Mat &draw, const Mat &Thres); // return a matrix what is most likely a traffic sign
