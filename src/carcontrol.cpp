@@ -31,7 +31,7 @@ double CarControl::GetAngle()
 	{
 		res = ObjectDetect::laneR;
 		OldAngle = F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect) - (SizeLane >> 1), LineDetect));
-		line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect) - (SizeLane >> 1), LineDetect), Scalar(0, 0, 255));
+		line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect) - (SizeLane >> 1), LineDetect + LaneDetect::SkyLine), Scalar(0, 0, 255));
 		return OldAngle;
 	}
 	// Lost right lane, follow left lane
@@ -39,7 +39,7 @@ double CarControl::GetAngle()
 	{
 		res = ObjectDetect::laneL;
 		OldAngle = F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect) + (SizeLane >> 1), LineDetect));
-		line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect) + (SizeLane >> 1), LineDetect), Scalar(0, 0, 255));
+		line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect) + (SizeLane >> 1), LineDetect + LaneDetect::SkyLine), Scalar(0, 0, 255));
 		return OldAngle;
 	}
 	// no lost lane
@@ -47,10 +47,10 @@ double CarControl::GetAngle()
 	res = F.Linear(LaneDetect::LaneM);
 	if (TrafficSign::Sign == 0)
 		UpdateSizeLane(F.ReturnX(ObjectDetect::laneL, LineDetect) + F.ReturnX(ObjectDetect::laneR, LineDetect) >> 1);
-	OldAngle = ReduceAngle(F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect)));
+	OldAngle = ReduceAngle(F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect + LaneDetect::SkyLine)));
 	// draw
-	line(LaneDetect::draw, Point(F.ReturnX(res, 0), 0), Point(F.ReturnX(res, 160), 160), Scalar(255, 255, 255));
-	line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect), Scalar(0, 0, 255));
+	line(LaneDetect::draw, Point(F.ReturnX(res, 0), LaneDetect::SkyLine), Point(F.ReturnX(res, 160), 160 + LaneDetect::SkyLine), Scalar(255, 255, 255));
+	line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect + LaneDetect::SkyLine), Scalar(0, 0, 255));
 
 	return OldAngle;
 }

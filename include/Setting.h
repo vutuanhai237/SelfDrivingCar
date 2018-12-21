@@ -48,7 +48,7 @@ const int CarControl::LineDetect = 35; // Location of Y-axis position where the 
 const double CarControl::LimitDistance = 3.0; // The value represent for noise on lane detecte. The the greater value, the greater noise receive
 const double CarControl::AngularCoefficient = 0.8; // Decision how strong apply curve
 
-Point CarControl::CarLocation = Point(320 >> 1, 160);
+Point CarControl::CarLocation = Point(320 >> 1, 240);
 
 double CarControl::OldAngle = 0; // Angle that old frame return
 const float CarControl::Alpha = 0.25; // the greater value, the most of change on SizeLane

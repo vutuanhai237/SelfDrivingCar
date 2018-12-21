@@ -9,14 +9,11 @@ void LaneDetect::Setting()
 
 Mat LaneDetect::ReduceNoise(const Mat &src)
 {
-	imshow("Camera", src);
+	//imshow("Camera", src);
 	Mat des(src, Rect(0, SkyLine, src.cols, src.rows - SkyLine));
-	des.copyTo(draw);
-	//draw.release();
-	rectangle(draw, Rect(0, 0, draw.cols, draw.rows), Scalar(0, 0, 0), -1);
-	
+	src.copyTo(draw);
 	cvtColor(des, des, COLOR_RGB2GRAY);
-	GaussianBlur(src, src, Size(BlurValue, BlurValue), 0, 0, BORDER_DEFAULT);
+	GaussianBlur(des, des, Size(BlurValue, BlurValue), 0, 0, BORDER_DEFAULT);
 	return des;
 }
 
@@ -32,7 +29,7 @@ Mat LaneDetect::CvtBinary(const Mat &src)
 	//morphological closing (removes small holes from the foreground)
 	dilate(des, des, getStructuringElement(MORPH_RECT, Size(2, 2)));
 	erode(des, des, getStructuringElement(MORPH_RECT, Size(2, 2)));
-	imshow("Binary", des);
+	//imshow("Binary", des);
 	return des;
 }
 
@@ -88,12 +85,12 @@ void LaneDetect::Detect(const Mat & src)
 void LaneDetect::DrawLane()
 {
 	for (int i = 0; i < LaneL.size(); i++)
-		circle(draw, LaneL[i], 2, Scalar(255, 0, 0), 2,8,0);
+		circle(draw, Point(LaneL[i].x, LaneL[i].y + SkyLine), 2, Scalar(255, 0, 0), 2, 8, 0);
 	for (int i = 0; i < LaneR.size(); i++)
-		circle(draw, LaneR[i], 2, Scalar(0, 255, 0), 2, 8, 0);
+		circle(draw, Point(LaneR[i].x, LaneR[i].y + SkyLine), 2, Scalar(0, 255, 0), 2, 8, 0);
 	//for (int i = 0; i < LaneM.size(); i++)
 	//	circle(draw, LaneM[i], 2, Scalar(255, 255, 255), 2, 8, 0);
-	imshow("Lane detect", draw);
+	//imshow("Binary", draw);
 }
 
 void LaneDetect::UpdateMidLane()

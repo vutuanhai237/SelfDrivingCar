@@ -2,6 +2,7 @@
 #include "LineFunction.h"
 #include "LaneDetect.h"
 #include "ObjectDetect.h"
+#include "LaneDetect.h"
 
 class CarControl
 {

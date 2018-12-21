@@ -15,7 +15,6 @@ class LaneDetect
 {
 #pragma region Setting value
 private:
-	static const int SkyLine; // =80
 	static const float alpha;
 
 	static int BlurValue;
@@ -24,6 +23,7 @@ private:
 	static int Accuracy;
 public:
 	static const Size Box; // 5x5 - Box detetion lane
+	static const int SkyLine; // =80
 	static double Fx_a;
 	static double Fx_b;
 #pragma endregion

@@ -3,6 +3,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
+#include "LaneDetect.h"
 
 using namespace cv;
 
@@ -29,9 +30,9 @@ public:
 #pragma endregion
 public:
 	void Setting();
-	int Find(Mat &src);
+	int Find(const Mat &src);
 private:
 	Mat PreFix(const Mat &src); // return a matrix Threshold for detection
 	Mat ThresholdDetection(Mat &draw, const Mat &Thres); // return a matrix what is most likely a traffic sign
-	int CheckSign(const Mat &src); // return 0 if none sign, -1 if turn left, 1 if turn right
+	int CheckSign(const Mat &binary); // return 0 if none sign, -1 if turn left, 1 if turn right
 };
