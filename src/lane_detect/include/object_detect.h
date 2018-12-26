@@ -7,7 +7,7 @@ class ObjectDetect
 {
 #pragma region Setting value
 	static const double LimitDistance; // The value represent for noise on lane detecte. The the greater value, the greater noise receive
-	static const int LostCount; // noise LostCount point => have object
+	static const int LostCount; // noise LostCount point => have object (have not code that function yet)
 #pragma endregion
 public:
 	static Line laneL;
