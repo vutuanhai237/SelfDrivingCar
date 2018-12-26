@@ -7,5 +7,5 @@ double Distance(const Line &line, const Point &p): nhận vào 1 điểm và 1 �
 double Angle(const Line &line): nhận vào đường thẳng và trả về góc giữa đường thẳng đó với trjc tung
 double Angle(const Point &p, const Point &CarLoction = Point(240, 240)): trả về góc giữa đường thẳng tạo bởi 2 điểm và trục tung
 int ReturnX(const Line &line, const double &y): trả về giá trị x khi thay giá trị y vào dudongf thẳng
-Line Linear(const vector<Point> &p): vẽ đường thẳng đi qua nhiều Point trong vector<Point> nhất có thể
+Line Linear(const vector<Point> &p): trả về đường thẳng đi qua nhiều Point trong vector<Point> nhất có thể
   
