@@ -14,9 +14,9 @@ public:
 	static Line laneR;
 private:
 	void IgnoreNoise(Line line, vector<Point> &lane);
-	bool FindObject(Line line, const vector<Point> &lane);
+	bool FindObject(Line line, const vector<Point> &lane); // temporarily not used
 public:
 	ObjectDetect();
 	~ObjectDetect();
-	void ClearObject();
+	void ClearObject(); // temporarily not used
 };
