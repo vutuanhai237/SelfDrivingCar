@@ -26,13 +26,14 @@ void call_back(const sensor_msgs::ImageConstPtr &msg)
 
         out = cv_ptr->image(ros);
         //cv::imshow("View", cv_ptr->image);
-        waitKey(10);
+        waitKey(40);
         detect->Detect(cv_ptr->image);
         sign->Find(cv_ptr->image);
+
         detect->DrawLane();
        
         car->driverCar(out);
-        
+        imshow("View", LaneDetect::draw);
     }
     catch(Exception e)
     {
@@ -49,8 +50,9 @@ void VideoProcess()
         if (src.empty())
             break;
         //imshow("View", src);
+
         detect->Detect(src);
-        waitKey(30);
+        waitKey(40);
     }
 }
 
@@ -64,7 +66,7 @@ int main(int argc, char **argv)
     detect->Setting();
     detect = new LaneDetect();
     car = new CarControl();
-
+    
     if (STREAM)
     {  
         ros::NodeHandle main_handle;   

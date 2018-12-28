@@ -1,4 +1,3 @@
-
 #pragma once
 //include 
 // -- ROS Header 
@@ -21,7 +20,7 @@ private:
 	static const int LineDetect; // Location of position where the car try going to
 
 	static const double LimitDistance; // The value represent for noise on lane detecte. The the greater value, the greater noise receive
-	static const int TooFew; // The value decition when too few point to determine a lane
+
 	static const double AngularCoefficient; // Decision how strong apply curve
 
 	static Point CarLocation;
@@ -37,6 +36,8 @@ private:
 public:
 	static int MinSpeed;
 	static int MaxSpeed;
+	static const int DefMaxSpeed;
+	static const double TurnStrong; // Default is 1.5; > 1.5 mean turn more effect; < 1.5 mean turn least effect
 private:
 	double Fx(int x);
 	double ReduceAngle(const double &angle);

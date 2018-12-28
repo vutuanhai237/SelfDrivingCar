@@ -1,22 +1,21 @@
 #include "lane_detect.h"
 
+Point LaneDetect::null = Point();
+
 void LaneDetect::Setting()
 {
 	namedWindow("Setting", CV_WINDOW_AUTOSIZE);
 	cvCreateTrackbar("Blur", "Setting", &BlurValue, 10);
 	cvCreateTrackbar("Accuracy", "Setting", &Accuracy, 100);
 }
-Point LaneDetect::null = Point();
+
 Mat LaneDetect::ReduceNoise(const Mat &src)
 {
-	imshow("Camera", src);
+	//imshow("Camera", src);
 	Mat des(src, Rect(0, SkyLine, src.cols, src.rows - SkyLine));
-	des.copyTo(draw);
-	//draw.release();
-	rectangle(draw, Rect(0, 0, draw.cols, draw.rows), Scalar(0, 0, 0), -1);
-	
+	src.copyTo(draw);
 	cvtColor(des, des, COLOR_RGB2GRAY);
-	GaussianBlur(src, src, Size(BlurValue, BlurValue), 0, 0, BORDER_DEFAULT);
+	//GaussianBlur(des, des, Size(BlurValue, BlurValue), 0, 0, BORDER_DEFAULT);
 	return des;
 }
 
@@ -27,12 +26,12 @@ Mat LaneDetect::CvtBinary(const Mat &src)
 	convertScaleAbs(des, des);
 	threshold(des, des, 50, 255, THRESH_BINARY);
 	//morphological opening (removes small objects from the foreground)
-	erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(2, 2)));
-	dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(2, 2)));
+	//erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(2, 2)));
+	//dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(2, 2)));
 	//morphological closing (removes small holes from the foreground)
-	dilate(des, des, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
-	erode(des, des, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
-	imshow("Binary", des);
+	dilate(des, des, getStructuringElement(MORPH_RECT, Size(2, 2)));
+	erode(des, des, getStructuringElement(MORPH_RECT, Size(2, 2)));
+	//imshow("Binary", des);
 	return des;
 }
 
@@ -46,7 +45,9 @@ void LaneDetect::FindLane(const Mat &BinarySrc)
 
 	int MidLane = BinarySrc.cols >> 1; // MidLane = car.location.x
 
-	for (int high = BinarySrc.rows - Box.height; high > 20; high = high - Box.height) // with a line
+	start = BinarySrc.rows - Box.height;
+
+	for (int high = start; high > 20; high = high - Box.height) // with a line
 	{
 		// Left lane
 		for (int i = MidLane - IgnoreFromMid(high); i > Box.width; i = i - (Box.width >> 1))
@@ -86,12 +87,10 @@ void LaneDetect::Detect(const Mat & src)
 void LaneDetect::DrawLane()
 {
 	for (int i = 0; i < LaneL.size(); i++)
-		circle(draw, LaneL[i], 2, Scalar(255, 0, 0), 2,8,0);
+		circle(draw, Point(LaneL[i].x, LaneL[i].y + SkyLine), 2, Scalar(255, 0, 0), 2, 8, 0);
 	for (int i = 0; i < LaneR.size(); i++)
-		circle(draw, LaneR[i], 2, Scalar(0, 255, 0), 2, 8, 0);
-	//for (int i = 0; i < LaneM.size(); i++)
-	//	circle(draw, LaneM[i], 2, Scalar(255, 255, 255), 2, 8, 0);
-	imshow("Lane detect", draw);
+		circle(draw, Point(LaneR[i].x, LaneR[i].y + SkyLine), 2, Scalar(0, 255, 0), 2, 8, 0);
+	//imshow("Binary", draw);
 }
 
 void LaneDetect::UpdateMidLane()
@@ -113,6 +112,45 @@ void LaneDetect::UpdateMidLane()
 			LaneM.push_back(Point((LaneL[i].x + LaneR[j].x) >> 1, LaneL[i].y));
 			i++;
 			j++;
+		}
+	}
+}
+
+void LaneDetect::DrawVirtualLane()
+{
+	LineFunction F;
+
+	if (TrafficSign::Sign == 1)
+	{
+		double LocX = 0;
+		double deltaX = Box.width*CarControl::TurnStrong;
+		if (LaneL.size() < TooFew || F.Angle(ObjectDetect::laneL) < 30)
+		{
+			LaneL.clear();
+			for (int i = start; i > 20; i = i - Box.height)
+			{
+				LaneL.push_back(Point(LocX, i));
+				LocX += deltaX;
+			}
+			ObjectDetect::laneL = F.CaculateLine(LaneL[0], LaneL[LaneL.size() - 1]);
+			return;
+		}
+	}
+
+	if (TrafficSign::Sign == -1)
+	{
+		double LocX = 320;
+		double deltaX = Box.width*CarControl::TurnStrong;
+		if (LaneR.size() < TooFew || F.Angle(ObjectDetect::laneR) > -30)
+		{
+			LaneR.clear();
+			for (int i = start; i > 20; i = i - Box.height)
+			{
+				LaneR.push_back(Point(LocX, i));
+				LocX -= deltaX;
+			}
+			ObjectDetect::laneR = F.CaculateLine(LaneR[0], LaneR[LaneR.size() - 1]);
+			return;
 		}
 	}
 }
