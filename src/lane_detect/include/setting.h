@@ -11,13 +11,13 @@ const int TrafficSign::MinSquare = 200; // 200 pixel - That is a size that use f
 const int TrafficSign::SkyLine = 10;
 const int TrafficSign::LeftLine = 80;
 // threshold of sign
+
 int TrafficSign::iLowH = 70;
 int TrafficSign::iHighH = 120;
 int TrafficSign::iLowL = 65;
 int TrafficSign::iHighL = 150;
 int TrafficSign::iLowS = 80;
 int TrafficSign::iHighS = 255;
-
 /*     ---LaneDetect.h---     */
 #include "lane_detect.h"
 const int LaneDetect::SkyLine = 80;  // 80 = 1/3 rows
@@ -54,7 +54,7 @@ const float CarControl::Alpha = 0.25; // the greater value, the most of change o
 const double CarControl::TurnStrong = 2.0; // Default is 1.5; > 1.5 mean turn more effect; < 1.5 mean turn least effect
 int CarControl::SizeLane = 40; // Size of lane
 
-const int CarControl::DefMaxSpeed = 65;
+const int CarControl::DefMaxSpeed = 50; //65
 
 int CarControl::MaxSpeed = CarControl::DefMaxSpeed;
 int CarControl::MinSpeed = 35;

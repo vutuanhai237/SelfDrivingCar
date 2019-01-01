@@ -22,6 +22,7 @@ Mat LaneDetect::ReduceNoise(const Mat &src)
 Mat LaneDetect::CvtBinary(const Mat &src)
 {
 	Mat des;
+	
 	Laplacian(src, des, CV_16S, KernelSize);
 	convertScaleAbs(des, des);
 	threshold(des, des, 50, 255, THRESH_BINARY);

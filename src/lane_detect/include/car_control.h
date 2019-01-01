@@ -47,5 +47,5 @@ public:
 	double GetAngle();
 	int GetSpeed(const double &angle);	
   void driverCar(Mat & out);
-
+	void get_speed_unity(float speed_unity);
 };

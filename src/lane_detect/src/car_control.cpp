@@ -1,9 +1,9 @@
 #include "car_control.h"
-
+float static_speed_unity;
 CarControl::CarControl()
 {
-	angle_publisher = node_obj1.advertise<std_msgs::Float32>("Team1_steerAngle", 0);
-	speed_publisher = node_obj2.advertise<std_msgs::Float32>("Team1_speed", 0);
+	angle_publisher = node_obj1.advertise<std_msgs::Float32>("Destiny_steerAngle", 0);
+	speed_publisher = node_obj2.advertise<std_msgs::Float32>("Destiny_speed", 0);
 }
 CarControl::~CarControl() {}
 void sleep(int milliseconds)
@@ -15,10 +15,15 @@ void sleep(int milliseconds)
 		
     }
 }
-
+void CarControl::get_speed_unity(float speed_unity)
+{
+	static_speed_unity = speed_unity;
+	cout << speed_unity << endl;
+}
 void CarControl::driverCar(Mat & out)
 {
 	int velocity;
+	
 	double angle_info;
 
 	// TrafficSign *F ;
@@ -46,6 +51,7 @@ void CarControl::driverCar(Mat & out)
 
 	angle_publisher.publish(angle);
 	speed_publisher.publish(speed);
+	
 }
 
 void CarControl::UpdateSizeLane(int NewSizeLane)
