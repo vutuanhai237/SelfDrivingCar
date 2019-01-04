@@ -8,7 +8,7 @@
             "includePath": [
                 "/home/haimeohung/catkin_ws/devel/include",
                 "/opt/ros/melodic/include",
-                "/home/haimeohung/Destiny/src/lane_detect/include",
+                "/home/haimeohung/Destiny/src/Team305/include",
                 "/usr/include"
             ],
             "name": "Linux"

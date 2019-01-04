@@ -1,7 +1,0 @@
-<launch>
-	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
-		<param name="port" value="9090"/>
-	</include>
-		<node name="file_server" pkg="file_server" type="file_server" output="screen"/>
-        	<node name="Destiny" pkg="lane_detect" type="lane_detect" output="screen" args="_image_transport:=compressed" />
-</launch>

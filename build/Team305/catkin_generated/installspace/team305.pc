@@ -1,0 +1,8 @@
+prefix=/home/haimeohung/Destiny/install
+
+Name: team305
+Description: Description of team305
+Version: 0.0.0
+Cflags: -I/home/haimeohung/Destiny/install/include
+Libs: -L/home/haimeohung/Destiny/install/lib -lapi_lane_detect
+Requires: roscpp

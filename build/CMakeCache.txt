@@ -266,6 +266,12 @@ RT_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/librt.so
 //Enable debian style python package layout
 SETUPTOOLS_DEB_LAYOUT:BOOL=ON
 
+//Value Computed by CMake
+Team305_BINARY_DIR:STATIC=/home/haimeohung/Destiny/build/Team305
+
+//Value Computed by CMake
+Team305_SOURCE_DIR:STATIC=/home/haimeohung/Destiny/src/Team305
+
 //LSB Distrib tag
 UBUNTU:BOOL=TRUE
 
@@ -431,6 +437,12 @@ sensor_msgs_DIR:PATH=/opt/ros/melodic/share/sensor_msgs/cmake
 
 //The directory containing a CMake configuration file for std_msgs.
 std_msgs_DIR:PATH=/opt/ros/melodic/share/std_msgs/cmake
+
+//Value Computed by CMake
+team305_BINARY_DIR:STATIC=/home/haimeohung/Destiny/build/team305
+
+//Value Computed by CMake
+team305_SOURCE_DIR:STATIC=/home/haimeohung/Destiny/src/team305
 
 //Value Computed by CMake
 video_stream_BINARY_DIR:STATIC=/home/haimeohung/Destiny/build/video_stream

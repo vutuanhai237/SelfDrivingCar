@@ -123,7 +123,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/haimeohung/Destiny/build/gtest/cmake_install.cmake")
   include("/home/haimeohung/Destiny/build/file_server/cmake_install.cmake")
-  include("/home/haimeohung/Destiny/build/lane_detect/cmake_install.cmake")
+  include("/home/haimeohung/Destiny/build/team305/cmake_install.cmake")
   include("/home/haimeohung/Destiny/build/video_stream/cmake_install.cmake")
 
 endif()

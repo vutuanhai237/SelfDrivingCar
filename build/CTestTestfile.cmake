@@ -6,5 +6,5 @@
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
 subdirs("file_server")
-subdirs("lane_detect")
+subdirs("team305")
 subdirs("video_stream")
