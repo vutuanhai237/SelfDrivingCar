@@ -1,9 +1,9 @@
 #include "car_control.h"
-
+float static_speed_unity;
 CarControl::CarControl()
 {
-	angle_publisher = node_obj1.advertise<std_msgs::Float32>("Team1_steerAngle", 0);
-	speed_publisher = node_obj2.advertise<std_msgs::Float32>("Team1_speed", 0);
+	angle_publisher = node_obj1.advertise<std_msgs::Float32>("team305_steerAngle", 0);
+	speed_publisher = node_obj2.advertise<std_msgs::Float32>("team305_speed", 0);
 }
 CarControl::~CarControl() {}
 void sleep(int milliseconds)
@@ -15,10 +15,16 @@ void sleep(int milliseconds)
 		
     }
 }
+void CarControl::get_speed_unity(float speed_unity)
+{
+	static_speed_unity = speed_unity;
+	//cout << speed_unity << endl;
+}
 
 void CarControl::driverCar(Mat & out)
 {
 	int velocity;
+	
 	double angle_info;
 
 	// TrafficSign *F ;
@@ -46,6 +52,7 @@ void CarControl::driverCar(Mat & out)
 
 	angle_publisher.publish(angle);
 	speed_publisher.publish(speed);
+	
 }
 
 void CarControl::UpdateSizeLane(int NewSizeLane)
@@ -93,18 +100,43 @@ double CarControl::GetAngle()
 	// no lost lane
 	L.UpdateMidLane();
 	res = F.Linear(LaneDetect::LaneM);
+	int delta = CarLocation.x - F.ReturnX(res, CarLocation.y);
+	if (F.Angle(res)>0)
+	{
+		if (delta<-7)
+		{
+			//delta/=2;
+		}
+		else
+		{
+			delta = 0;
+		}
+	}
+	else
+	{
+		if (delta>7)
+		{
+			//delta/=2;
+		}
+		else
+		{
+			delta=0;
+		}
+	}
 	if (TrafficSign::Sign == 0)
 		UpdateSizeLane(F.ReturnX(ObjectDetect::laneL, LineDetect) + F.ReturnX(ObjectDetect::laneR, LineDetect) >> 1);
-	OldAngle = ReduceAngle(F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect + LaneDetect::SkyLine)));
+	OldAngle = ReduceAngle(F.Angle(CarLocation, Point(F.ReturnX(res, LineDetect)-delta, LineDetect + LaneDetect::SkyLine)));
 	// draw
-	line(LaneDetect::draw, Point(F.ReturnX(res, 0), LaneDetect::SkyLine), Point(F.ReturnX(res, 160), 160 + LaneDetect::SkyLine), Scalar(255, 255, 255));
-	line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect), LineDetect + LaneDetect::SkyLine), Scalar(0, 0, 255));
+	//line(LaneDetect::draw, Point(F.ReturnX(res, 0), LaneDetect::SkyLine), Point(F.ReturnX(res, 160), 160 + LaneDetect::SkyLine), Scalar(255, 255, 255));
+
+	line(LaneDetect::draw, Point(F.ReturnX(res, 0) -15, LaneDetect::SkyLine), Point(F.ReturnX(res, 160), 160 + LaneDetect::SkyLine), Scalar(255, 255, 255));
+	line(LaneDetect::draw, CarLocation, Point(F.ReturnX(res, LineDetect)-delta, LineDetect + LaneDetect::SkyLine), Scalar(0, 0, 255));
 
 	return OldAngle;
 }
 
 int CarControl::GetSpeed(const double & angle)
 {
-	int res = MaxSpeed - abs(angle) * 3;
+	int res = MaxSpeed - abs(angle)*3;
 	return res < MinSpeed ? MinSpeed : res;
 }

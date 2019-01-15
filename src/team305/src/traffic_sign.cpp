@@ -26,9 +26,9 @@ Mat TrafficSign::PreFix(const Mat &src)
 	//Mat des(src, Rect(src.cols >> 0, 0, src.cols >> 0, src.rows));
 	//imshow("Real", des);
 	//cvtColor(des, des, COLOR_RGB2HLS);
-	Mat des(src);
-	cvtColor(des, des, COLOR_BGR2HLS);
-
+	Mat des(src, Rect(LeftLine, SkyLine, src.cols - LeftLine, (src.rows >> 1) - SkyLine));
+	//Mat des(src);
+	cvtColor(des, des, COLOR_BGR2HLS);	
 	//imshow("HLS", des);
 
 	//GaussianBlur(des, des, Size(3, 3), 0);
@@ -52,6 +52,7 @@ Mat TrafficSign::ThresholdDetection(Mat &draw, const Mat &Thres)
 	vector<vector<Point>> contours;
 	vector<Vec4i> hierarchy;
 
+	//imshow("thres", Thres);
 	findContours(Thres, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
 	Rect rec(0, 0, 1, 1);
@@ -70,7 +71,15 @@ Mat TrafficSign::ThresholdDetection(Mat &draw, const Mat &Thres)
 	if (rec.area() < MinSquare)
 		return Mat(draw, Rect(0, 0, 1, 1));
 	rectangle(draw, Rect(rec.x + LeftLine, rec.y + SkyLine, rec.width, rec.height), Scalar(0, 0, 255));
+	if (this->Sign == 1)
+	{
+		putText(draw, "turn_right", Point(rec.x + LeftLine, rec.y + SkyLine), FONT_HERSHEY_PLAIN, 0.7, CV_RGB(0,255,0), 2.0);
+	}
+	else
+	{
+		putText(draw, "turn_left", Point(rec.x + LeftLine, rec.y + SkyLine), FONT_HERSHEY_PLAIN, 0.7, CV_RGB(0,255,0), 2.0);
 
+	}
 	//imshow("Real", draw);
 
 	// forcus to obj detected and cover to square
@@ -132,6 +141,7 @@ int TrafficSign::CheckSign(const Mat &src)
 		CountFrame = 1;
 		TrafficSign::Sign = sign;
 		CarControl::MaxSpeed = CarControl::MinSpeed;
+		//CarControl::SizeLane >>=1;
 		return sign;
 	}
 

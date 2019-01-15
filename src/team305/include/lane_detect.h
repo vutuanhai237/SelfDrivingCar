@@ -40,11 +40,13 @@ public:
   static Point null;
 #pragma endregion
 public:
+	void DetectReverse(const Mat &src);
 	void Setting();
 	void Detect(const Mat &src);
 	void DrawLane();
 	void UpdateMidLane();
 	static void DrawVirtualLane();
+
 	~LaneDetect();
 private:
 	Mat ReduceNoise(const Mat &src);

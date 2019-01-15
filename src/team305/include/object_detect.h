@@ -7,16 +7,17 @@ class ObjectDetect
 {
 #pragma region Setting value
 	static const double LimitDistance; // The value represent for noise on lane detecte. The the greater value, the greater noise receive
-	static const int LostCount; // noise LostCount point => have object (have not code that function yet)
+	static const int LostCount; // noise LostCount point => have object
 #pragma endregion
 public:
 	static Line laneL;
 	static Line laneR;
+	static Line laneM;
 private:
 	void IgnoreNoise(Line line, vector<Point> &lane);
-	bool FindObject(Line line, const vector<Point> &lane); // temporarily not used
+	bool FindObject(Line line, const vector<Point> &lane);
 public:
 	ObjectDetect();
 	~ObjectDetect();
-	void ClearObject(); // temporarily not used
+	void ClearObject();
 };

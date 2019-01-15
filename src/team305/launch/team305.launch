@@ -1,0 +1,7 @@
+<launch>
+	
+	<include ns="bridge05" file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+		<arg name="port" value="9005"/> 
+	</include>
+        <node name="team305" pkg="team305" type="team305" output="screen" args="_image_transport:=compressed" />
+</launch>

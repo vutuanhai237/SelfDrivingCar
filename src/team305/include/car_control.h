@@ -26,7 +26,6 @@ private:
 	static Point CarLocation;
 	static double OldAngle; // Angle that old frame return
 	static const float Alpha; // The greater value, the most of change on SizeLane
-	static int SizeLane; // Size of lane at line detecte
 	void UpdateSizeLane(int NewSizeLane);
 
   ros::NodeHandle node_obj1;
@@ -34,6 +33,7 @@ private:
   ros::Publisher angle_publisher;
   ros::Publisher speed_publisher;
 public:
+	static int SizeLane; // Size of lane at line detecte
 	static int MinSpeed;
 	static int MaxSpeed;
 	static const int DefMaxSpeed;
@@ -41,11 +41,12 @@ public:
 private:
 	double Fx(int x);
 	double ReduceAngle(const double &angle);
+
 public:
   CarControl();
   ~CarControl();
 	double GetAngle();
 	int GetSpeed(const double &angle);	
   void driverCar(Mat & out);
-
+	void get_speed_unity(float speed_unity);
 };

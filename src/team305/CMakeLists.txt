@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-
-project(lane_detect)
-
+project(team305)
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
@@ -49,7 +47,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES api_lane_detect
+  LIBRARIES ${PROJECT_NAME}_node
   CATKIN_DEPENDS roscpp
   #DEPENDS system_lib
 )
@@ -63,7 +61,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(api_lane_detect
+add_library(${PROJECT_NAME}_node
    src/lane_detect.cpp
    src/car_control.cpp
    src/line_function.cpp
@@ -71,12 +69,12 @@ add_library(api_lane_detect
    src/object_detect.cpp
 )
 
-add_executable(lane_detect src/main.cpp)
-add_dependencies(lane_detect ${catkin_EXPORTED_TARGETS})
+add_executable(team305 src/main.cpp)
+add_dependencies(team305 ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(lane_detect
-  api_lane_detect
+target_link_libraries(team305
+  ${PROJECT_NAME}_node
    ${catkin_LIBRARIES}
    ${OpenCV_LIBS}
    ${Boost_LIBRARIES}
@@ -88,7 +86,7 @@ target_link_libraries(lane_detect
 #############
 
 ## Mark executables and/or libraries for installation
-install(TARGETS api_lane_detect ${ADDITIONAL_EXECUTABLES}
+install(TARGETS ${PROJECT_NAME}_node ${ADDITIONAL_EXECUTABLES}
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

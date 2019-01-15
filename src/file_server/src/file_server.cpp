@@ -49,7 +49,6 @@ int main(int argc, char **argv)
 	ros::ServiceServer serviceServer = n.advertiseService("/file_server/get_file", get_file);
 	ROS_INFO("ROSbridge File Server initialized.");
 	ros::spin();
-
 	return 0;
 }
 

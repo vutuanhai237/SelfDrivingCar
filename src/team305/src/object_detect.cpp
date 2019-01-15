@@ -29,7 +29,7 @@ void ObjectDetect::ClearObject()
 	laneL = F.Linear(LaneDetect::LaneL);
 	laneR = F.Linear(LaneDetect::LaneR);
 
-	if (TrafficSign::Sign != 0) // Turn right
+	if (TrafficSign::Sign != 0) // Turn
 		LaneDetect::DrawVirtualLane();
 
 	IgnoreNoise(laneL, LaneDetect::LaneL);
