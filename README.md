@@ -23,7 +23,9 @@ To build, type:
 Copy folder from [your_clone_respository]/src into catkin_ws/src, then type `catkin_make` again.
 
 # 3. Usage
-Initialize ros-master: roslaunch team305 team305.launch
+Initialize ros-master: 
+
+`roslaunch team305 team305.launch`
 
 Now you can connect to a simulator software by fill team_name and ip address.
 
@@ -36,3 +38,7 @@ Get in URL: https://drive.google.com/open?id=1wI5_UWDXUNwNHWy-g303rsd7nVxGXRzy
 # 5. Content
 
 https://drive.google.com/open?id=1rwI-2c32rM2McZJgayUS8J_p-5ZOTQgV
+
+# 6. Test video
+
+https://youtu.be/9e7tzggmux0
