@@ -31,7 +31,7 @@ Now you can connect to a simulator software by fill team_name and ip address.
 
 For example: team305 - ws://127.0.0.1:9005
 
-If you don't like my team name or want to connect by another address, you can edit node_name and file_server tag in team305. launch file.
+If you don't like my team's name or want to connect by another address, you can edit node_name and file_server tag in team305. launch file.
 
 # 4. Simulation material
 Get in URL: https://drive.google.com/open?id=1wI5_UWDXUNwNHWy-g303rsd7nVxGXRzy 
