@@ -1,8 +1,0 @@
-prefix=/home/haimeohung/Destiny/devel
-
-Name: video_stream
-Description: Description of video_stream
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/haimeohung/Destiny/devel/lib 
-Requires: 
